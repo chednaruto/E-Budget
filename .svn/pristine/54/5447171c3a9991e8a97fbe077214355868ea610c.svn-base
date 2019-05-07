@@ -1,0 +1,134 @@
+package rd.ebudget.object.Budget;
+
+import rd.ebudget.tools.DB2Manager;
+
+public class UserPermission {
+
+    private String id;
+    private String admin;
+    private String parcel;
+    private String finance;
+    private String officeid;
+    private String permission_status;
+
+    public boolean InsertUserPermission(UserPermission up){
+        boolean ret = false;
+        try{
+            String query = "";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        }catch(Exception ex){
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public boolean UpdateUserPermission(UserPermission up){
+        boolean ret = false;
+        try{
+            String query = "";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        }catch(Exception ex){
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public boolean DeleteUserPermission(UserPermission up){
+        boolean ret = false;
+        try{
+            String query = "";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        }catch(Exception ex){
+            ret = false;
+        }
+        return ret;
+    }
+    
+    
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the admin
+     */
+    public String getAdmin() {
+        return admin;
+    }
+
+    /**
+     * @param admin the admin to set
+     */
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    /**
+     * @return the parcel
+     */
+    public String getParcel() {
+        return parcel;
+    }
+
+    /**
+     * @param parcel the parcel to set
+     */
+    public void setParcel(String parcel) {
+        this.parcel = parcel;
+    }
+
+    /**
+     * @return the finance
+     */
+    public String getFinance() {
+        return finance;
+    }
+
+    /**
+     * @param finance the finance to set
+     */
+    public void setFinance(String finance) {
+        this.finance = finance;
+    }
+
+    /**
+     * @return the officeid
+     */
+    public String getOfficeid() {
+        return officeid;
+    }
+
+    /**
+     * @param officeid the officeid to set
+     */
+    public void setOfficeid(String officeid) {
+        this.officeid = officeid;
+    }
+
+    /**
+     * @return the permission_status
+     */
+    public String getPermission_status() {
+        return permission_status;
+    }
+
+    /**
+     * @param permission_status the permission_status to set
+     */
+    public void setPermission_status(String permission_status) {
+        this.permission_status = permission_status;
+    }
+}

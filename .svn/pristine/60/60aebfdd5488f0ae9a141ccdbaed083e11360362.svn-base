@@ -1,0 +1,7 @@
+#MYSQL Connection
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://10.26.17.12
+jdbc.port=3306
+jdbc.dbname=e_tracking
+jdbc.username=sa
+jdbc.password=sa

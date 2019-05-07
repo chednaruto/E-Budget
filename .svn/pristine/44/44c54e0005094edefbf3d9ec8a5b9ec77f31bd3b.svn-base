@@ -1,0 +1,105 @@
+package rd.ebudget.tools;
+
+import java.sql.ResultSet;
+
+public class EBudgetTools {
+
+    public boolean CheckBalance(int budget_category_id, String officeid, double total_budget) {
+        boolean ret = false;
+        try {
+            String query = "SELECT bt.budget_type_id,bt.budget_type_name,bc.budget_category_id,bc.budget_category_name,"
+                    + "SUM(CASE WHEN t.tb_source IN('receive_budget','receive_tranfer_budget','receive_change_budget') THEN t.budget_total ELSE 0 END) receive_total,"
+                    + "SUM(CASE WHEN t.tb_source IN('tranfer_budget','change_budget','allocate_budget','payment_budget') THEN t.budget_total ELSE 0 END) used_total "
+                    + "FROM ( 	"
+                    + "     select 'receive_budget' as tb_source,"
+                    + "     rb.receive_budget_id AS transaction_id,"
+                    + "     TIMESTAMP(rb.budget_receive_date,'00:00:00') As transaction_datetime,"
+                    + "     '' AS detail,"
+                    + "     rb.budget_total,"
+                    + "     rb.budget_category_id "
+                    + "     from e_budget.receive_budget rb "
+                    + "     where rb.officeid = '" + officeid + "' "
+                    + "     UNION      	"
+                    + "     select 'tranfer_budget' AS tb_source,"
+                    + "     tb.tranfer_budget_id AS transaction_id,"
+                    + "     tb.tranfer_budget_datetime AS transaction_datetime,     	"
+                    + "     of.officename AS detail,"
+                    + "     tb.budget_total,"
+                    + "     tb.budget_category_id"
+                    + "     from e_budget.tranfer_budget tb"
+                    + "     left join e_budget.office of ON tb.to_officeid = of.officeid"
+                    + "     where tb.from_officeid = '" + officeid + "'     	"
+                    + "     UNION      	"
+                    + "     select 'receive_tranfer_budget' AS tb_source,"
+                    + "     tb.tranfer_budget_id AS transaction_id,"
+                    + "     tb.tranfer_budget_datetime AS transaction_datetime,"
+                    + "     of.officename as detail,"
+                    + "     tb.budget_total,"
+                    + "     tb.budget_category_id"
+                    + "     from e_budget.tranfer_budget tb"
+                    + "     left join e_budget.office of ON tb.from_officeid = officeid"
+                    + "     where tb.to_officeid = '" + officeid + "'     	"
+                    + "     UNION "
+                    + "     select 'change_budget' AS tb_source,"
+                    + "     cb.change_budget_id AS transaction_id,"
+                    + "     cb.change_budget_datetime AS transaction_datetime,"
+                    + "     bc.budget_category_name AS detail,"
+                    + "     cb.budget_total,"
+                    + "     cb.from_budget_category_id as budget_category_id"
+                    + "     from e_budget.change_budget cb"
+                    + "     LEFT JOIN e_budget.budget_category bc On cb.to_budget_category_id = budget_category_id"
+                    + "     WHERE cb.officeid = '" + officeid + "'"
+                    + "     UNION "
+                    + "     select 'receive_change_budget' as tb_source,"
+                    + "     cb.change_budget_id AS transaction_id,"
+                    + "     cb.change_budget_datetime as transaction_datetime,"
+                    + "     bc.budget_category_name as detail,"
+                    + "     cb.budget_total,"
+                    + "     cb.to_budget_category_id as budget_category_id 	from e_budget.change_budget cb"
+                    + "     left join e_budget.budget_category bc ON cb.from_budget_category_id = bc.budget_category_id"
+                    + "     where cb.officeid= '" + officeid + "'      "
+                    + "     UNION"
+                    + "     SELECT 'allocate_budget' AS tb_source,"
+                    + "     ab.allocate_budget_id AS transaction_id,"
+                    + "     ab.allocate_budget_datetime AS transaction_datetime,"
+                    + "     p.project_name AS detail,"
+                    + "     ab.allocate_budget_total AS  budget_total,"
+                    + "     budget_category_id"
+                    + "     FROM e_budget.allocate_budget ab "
+                    + "     LEFT JOIN e_budget.project p ON ab.project_id = p.project_id"
+                    + "     WHERE ab.officeid= '" + officeid + "'"
+                    + "     UNION      "
+                    + "     SELECT 'payment_budget' AS tb_source,"
+                    + "     pb.payment_budget_id AS transaction_id,"
+                    + "     pb.payment_budget_datetime AS transaction_datetime,"
+                    + "     '' as detail,"
+                    + "     pb.payment_budget_total As  budget_total,"
+                    + "     pb.budget_category_id      "
+                    + "     FROM e_budget.payment_budget pb"
+                    + "     WHERE pb.officeid= '" + officeid + "' "
+                    + ") as t "
+                    + "left join e_budget.budget_category bc ON t.budget_category_id = bc.budget_category_id "
+                    + "left join e_budget.budget_type bt ON bc.budget_type_id = bt.budget_type_id "
+                    + "WHERE t.budget_category_id = " + budget_category_id + " group by bt.budget_type_id,bt.budget_type_name,bc.budget_category_id,bc.budget_category_name";
+            DB2Manager dbms = new DB2Manager();
+            ResultSet rs = dbms.GetDataAsResultSet(query);
+            if (rs.next()) {
+                double receive_total = rs.getDouble("receive_total");
+                double used_total = rs.getDouble("receive_total");
+                if (receive_total >= (used_total + total_budget)) {
+                    ret = true;
+                }else{
+                    ret = false;
+                }
+            }
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+
+    public static void main(String args[]) {
+        EBudgetTools eb = new EBudgetTools();
+        boolean ret = eb.CheckBalance(6, "00005000", 50000.0);
+    }
+}

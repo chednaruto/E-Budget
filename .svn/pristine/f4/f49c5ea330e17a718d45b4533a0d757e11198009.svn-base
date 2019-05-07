@@ -1,0 +1,94 @@
+
+package rd.ebudget.object.lookup.budget;
+
+import java.sql.ResultSet;
+import rd.ebudget.tools.MysqlManager;
+
+public class DisbursementType {
+    private String disbursement_type_id;
+    private String disbursement_type_name;
+    private String disbursement_type_status;
+
+    public boolean InsertDisbursementType(DisbursementType dt){
+        boolean ret = false;
+        try{
+            String query = "INSERT INTO disbursement_type(disbursement_type_name,disbursement_type_status) " +
+                    "VALUES('"+dt.getDisbursement_type_name()+"','"+dt.getDisbursement_type_status()+"')";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret;
+    }
+    
+    public boolean UpdateDisbursementType(DisbursementType dt){
+        boolean ret = false;
+        try{
+            String query = "REPLACE INTO disbursement_type(disbursement_type_id,disbursement_type_name,disbursement_type_status) " +
+                    "VALUES('"+dt.getDisbursement_type_id()+"','"+dt.getDisbursement_type_name()+"','"+dt.getDisbursement_type_status()+"')";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret;
+    }
+    
+    public boolean DeleteDisbursementType(DisbursementType dt){
+        boolean ret = false;
+        try{
+            String query = "DELETE FROM disbursement_type WHERE disbursement_type_id='"+dt.getDisbursement_type_id()+"'";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret;
+    }
+    
+    public boolean CheckingUsage(DisbursementType tc){
+        boolean ret = true;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "SELECT COUNT(*) cc FROM  disbursement_category WHERE disbursement_type_id='" + tc.getDisbursement_type_id()+ "'";
+            ResultSet rsl = mm.GetDataAsResultSet(query);
+            while (rsl.next()) {
+                if (rsl.getInt("cc") > 0) {
+                    ret = false;
+                } else {
+                    ret = true;
+                }
+            }
+            rsl.close();
+            mm.closeConnection();
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }    
+    
+    public String getDisbursement_type_id() {
+        return disbursement_type_id;
+    }
+
+    public void setDisbursement_type_id(String disbursement_type_id) {
+        this.disbursement_type_id = disbursement_type_id;
+    }
+
+    public String getDisbursement_type_name() {
+        return disbursement_type_name;
+    }
+
+    public void setDisbursement_type_name(String disbursement_type_name) {
+        this.disbursement_type_name = disbursement_type_name;
+    }
+
+    public String getDisbursement_type_status() {
+        return disbursement_type_status;
+    }
+
+    public void setDisbursement_type_status(String disbursement_type_status) {
+        this.disbursement_type_status = disbursement_type_status;
+    }
+}

@@ -1,0 +1,50 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<div class="main-content-inner">
+    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i><a href="index.php">Home</a></li>
+
+        </ul>
+        <label style="float:right;"><% out.print(session.getAttribute("E-Budget-OFFICENAME"));%></label>
+    </div>
+    <%
+        if (request.getMethod() != null && request.getMethod() == "POST") {
+    %>
+    <div class="page-content">
+        <div class="page-header">
+            <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ยินดีต้อนรับเข้าสู่ระบบ E-Traking : ระบบติดตามการดำเนินงานโครงการ </small></h1>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-12 center">
+                    <h3 class="smaller lighter grey">
+                        <i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i>
+                        กำลังตรวจสอบข้อมูลจากระบบ E-Office Potal กรุณารอสักครู่...<br /><br />
+                        <%
+                            if (request.getParameter("authen") != null && request.getParameter("authen") == "true") {
+                                session.setAttribute("E-Budget", request.getParameter("authen"));
+
+                            } 
+                        %>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div
+<%                    } else {
+        
+        if (request.getParameter("command") != null && request.getParameter("command").equals("Login")) {
+            session.setAttribute("E-Budget", true);
+            session.setAttribute("E-Budget-OFFICEID", "00004000");
+            session.setAttribute("E-Budget-OFFICENAME", "กองเทคโนโลยีสารสนเทศ");
+            session.setAttribute("E-Budget-DISPLAYNAME", "นายณรงค์เดช");
+            session.setAttribute("E-Budget-UID", "352451");
+            session.setAttribute("E-Budget-POSITIONM", "นักวิชาการคอมพิวเตอร์");
+            session.setAttribute("E-Budget-GROUPNAME", "สนับสนุน");
+            session.setAttribute("e-Budget-PIN", "1319900132802");
+            out.print("<script>location.href='index.jsp?service=News';</script>");
+        }
+    }
+%>
+

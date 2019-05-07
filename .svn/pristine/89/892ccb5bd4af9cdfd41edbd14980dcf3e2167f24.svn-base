@@ -1,0 +1,379 @@
+package rd.ebudget.object.Budget;
+
+import java.sql.ResultSet;
+import rd.ebudget.tools.DB2Manager;
+
+public class EBiddingResult {
+
+    private String project_id;
+    private String draf_tor_step1_date;
+    private String draf_tor_step2_date;
+    private String draf_tor_step3_date;
+    private String approve_tor_step1_date;
+    private String approve_tor_step2_date;
+    private String contest_announcement_step1_startdate;
+    private String contest_announcement_step1_enddate;
+    private String open_envelope_step1_date;
+    private String open_envelope_step2_startdate;
+    private String open_envelope_step2_enddate;
+    private String approve_step1_startdate;
+    private String approve_step1_enddate;
+    private String approve_step2_startdate;
+    private String approve_step2_enddate;
+    private String approve_step3_date;
+    private String approve_step4_startdate;
+    private String approve_step4_enddate;
+    private String approve_step5_startdate;
+    private String approve_step5_enddate;
+    private String sign_promise_date;
+
+    public boolean InsertEBiddingResult(EBiddingResult er) {
+        boolean ret = false;
+        try {
+            String query = "SELECT * FROM e_budget.e_bidding_result WHERE project_id='" + er.getProject_id() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ResultSet rs = dbms.GetDataAsResultSet(query);
+            String draf_tor_step1_date = "";
+            if (er.getDraf_tor_step1_date().isEmpty()) {
+                draf_tor_step1_date = "NULL";
+            } else {
+                draf_tor_step1_date = "'" + er.getDraf_tor_step1_date() + "'";
+            }
+            String draf_tor_step2_date = "";
+            if (er.getDraf_tor_step2_date().isEmpty()) {
+                draf_tor_step2_date = "NULL";
+            } else {
+                draf_tor_step2_date = "'" + er.getDraf_tor_step2_date() + "'";
+            }
+            String draf_tor_step3_date = "";
+            if (er.getDraf_tor_step3_date().isEmpty()) {
+                draf_tor_step3_date = "NULL";
+            } else {
+                draf_tor_step3_date = "'" + er.getDraf_tor_step3_date() + "'";
+            }
+            String approve_tor_step1_date = "";
+            if (er.getApprove_tor_step1_date().isEmpty()) {
+                approve_tor_step1_date = "NULL";
+            } else {
+                approve_tor_step1_date = "'" + er.getApprove_tor_step1_date() + "'";
+            }
+            String approve_tor_step2_date = "";
+            if (er.getApprove_tor_step2_date().isEmpty()) {
+                approve_tor_step2_date = "NULL";
+            } else {
+                approve_tor_step2_date = "'" + er.getApprove_tor_step2_date() + "'";
+            }
+            String contest_announcement_step1_startdate = "";
+            if (er.getContest_announcement_step1_startdate().isEmpty()) {
+                contest_announcement_step1_startdate = "NULL";
+            } else {
+                contest_announcement_step1_startdate = "'" + er.getContest_announcement_step1_startdate() + "'";
+            }
+            String contest_announcement_step1_enddate = "";
+            if (er.getContest_announcement_step1_enddate().isEmpty()) {
+                contest_announcement_step1_enddate = "NULL";
+            } else {
+                contest_announcement_step1_enddate = "'" + er.getContest_announcement_step1_enddate() + "'";
+            }
+            String open_envelope_step1_date = "";
+            if (er.getOpen_envelope_step1_date().isEmpty()) {
+                open_envelope_step1_date = "NULL";
+            } else {
+                open_envelope_step1_date = "'" + er.getOpen_envelope_step1_date() + "'";
+            }
+            String open_envelope_step2_startdate = "";
+            if (er.getOpen_envelope_step2_startdate().isEmpty()) {
+                open_envelope_step2_startdate = "NULL";
+            } else {
+                open_envelope_step2_startdate = "'" + er.getOpen_envelope_step2_startdate() + "'";
+            }
+            String open_envelope_step2_enddate = "";
+            if (er.getOpen_envelope_step2_enddate().isEmpty()) {
+                open_envelope_step2_enddate = "NULL";
+            } else {
+                open_envelope_step2_enddate = "'" + er.getOpen_envelope_step2_enddate() + "'";
+            }
+            String approve_step1_startdate = "";
+            if (er.getApprove_step1_startdate().isEmpty()) {
+                approve_step1_startdate = "NULL";
+            } else {
+                approve_step1_startdate = "'" + er.getApprove_step1_startdate() + "'";
+            }
+            String approve_step1_enddate = "";
+            if (er.getApprove_step1_enddate().isEmpty()) {
+                approve_step1_enddate = "NULL";
+            } else {
+                approve_step1_enddate = "'" + er.getApprove_step1_enddate() + "'";
+            }
+            String approve_step2_startdate = "";
+            if (er.getApprove_step2_startdate().isEmpty()) {
+                approve_step2_startdate = "NULL";
+            } else {
+                approve_step2_startdate = "'" + er.getApprove_step2_startdate() + "'";
+            }
+            String approve_step2_enddate = "";
+            if (er.getApprove_step2_enddate().isEmpty()) {
+                approve_step2_enddate = "NULL";
+            } else {
+                approve_step2_enddate = "'" + er.getApprove_step2_enddate() + "'";
+            }
+            String approve_step3_date = "";
+            if (er.getApprove_step3_date().isEmpty()) {
+                approve_step3_date = "NULL";
+            } else {
+                approve_step3_date = "'" + er.getApprove_step3_date() + "'";
+            }
+            String approve_step4_startdate = "";
+            if (er.getApprove_step4_startdate().isEmpty()) {
+                approve_step4_startdate = "NULL";
+            } else {
+                approve_step4_startdate = "'" + er.getApprove_step4_startdate() + "'";
+            }
+            String approve_step4_enddate = "";
+            if (er.getApprove_step4_enddate().isEmpty()) {
+                approve_step4_enddate = "NULL";
+            } else {
+                approve_step4_enddate = "'" + er.getApprove_step4_enddate() + "'";
+            }
+            String approve_step5_startdate = "";
+            if (er.getApprove_step5_startdate().isEmpty()) {
+                approve_step5_startdate = "NULL";
+            } else {
+                approve_step5_startdate = "'" + er.getApprove_step5_startdate() + "'";
+            }
+            String approve_step5_enddate = "";
+            if (er.getApprove_step5_enddate().isEmpty()) {
+                approve_step5_enddate = "NULL";
+            } else {
+                approve_step5_enddate = "'" + er.getApprove_step5_enddate() + "'";
+            }
+            String sign_promise_date = "";
+            if (er.getSign_promise_date().isEmpty()) {
+                sign_promise_date = "NULL";
+            } else {
+                sign_promise_date = "'" + er.getSign_promise_date() + "'";
+            }
+
+            if (!rs.next()) {
+                query = "INSERT INTO e_budget.e_bidding_result(project_id,draf_tor_step1_date,draf_tor_step2_date,draf_tor_step3_date,approve_tor_step1_date,"
+                        + "approve_tor_step2_date,contest_announcement_step1_startdate,contest_announcement_step1_enddate,open_envelope_step1_date,open_envelope_step2_startdate,"
+                        + "open_envelope_step2_enddate,approve_step1_startdate,approve_step1_enddate,approve_step2_startdate,approve_step2_enddate,"
+                        + "approve_step3_date,approve_step4_startdate,approve_step4_enddate,approve_step5_startdate,approve_step5_enddate,"
+                        + "sign_promise_date) "
+                        + "VALUES('"+er.getProject_id()+"',"+draf_tor_step1_date+","+draf_tor_step2_date+","+draf_tor_step3_date+","+approve_tor_step1_date+","
+                        + ""+approve_tor_step2_date+","+contest_announcement_step1_startdate+","+contest_announcement_step1_enddate+","+open_envelope_step1_date+","+open_envelope_step2_startdate+","
+                        + ""+open_envelope_step2_enddate+","+approve_step1_startdate+","+approve_step1_enddate+","+approve_step2_startdate+","+approve_step2_enddate+","
+                        + ""+approve_step3_date+","+approve_step4_startdate+","+approve_step4_enddate+","+approve_step5_startdate+","+approve_step5_enddate+","
+                        + ""+sign_promise_date+")";
+            } else {
+                query = "UPDATE e_budget.e_bidding_result "
+                        + "SET draf_tor_step1_date=" + draf_tor_step1_date + ","
+                        + "draf_tor_step2_date=" + draf_tor_step2_date + ","
+                        + "draf_tor_step3_date=" + draf_tor_step3_date + ","
+                        + "approve_tor_step1_date=" + approve_tor_step1_date + ","
+                        + "approve_tor_step2_date=" + approve_tor_step2_date + ","
+                        + "contest_announcement_step1_startdate=" + contest_announcement_step1_startdate + ","
+                        + "contest_announcement_step1_enddate=" + contest_announcement_step1_enddate + ","
+                        + "open_envelope_step1_date=" + open_envelope_step1_date + ","
+                        + "open_envelope_step2_startdate=" + open_envelope_step2_startdate + ","
+                        + "open_envelope_step2_enddate=" + open_envelope_step2_enddate + ","
+                        + "approve_step1_startdate=" + approve_step1_startdate + ","
+                        + "approve_step1_enddate=" + approve_step1_enddate + ","
+                        + "approve_step2_startdate=" + approve_step2_startdate + ","
+                        + "approve_step2_enddate=" + approve_step2_enddate + ","
+                        + "approve_step3_date=" + approve_step3_date + ","
+                        + "approve_step4_startdate=" + approve_step4_startdate + ","
+                        + "approve_step4_enddate=" + approve_step4_enddate + ","
+                        + "approve_step5_startdate=" + approve_step5_startdate + ","
+                        + "approve_step5_enddate=" + approve_step5_enddate + ","
+                        + "sign_promise_date=" + sign_promise_date + " "
+                        + "WHERE project_id='" + er.getProject_id() + "'";
+            }
+            System.out.println(query);
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+    
+    public boolean DeleteEBiddingResult(EBiddingResult er){
+        boolean ret = false;
+        try{
+            String query = "DELETE FROM e_budget.e_bidding_result WHERE project_id='"+er.getProject_id()+"'";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret ;
+    }
+
+    public String getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    public String getDraf_tor_step1_date() {
+        return draf_tor_step1_date;
+    }
+
+    public void setDraf_tor_step1_date(String draf_tor_step1_date) {
+        this.draf_tor_step1_date = draf_tor_step1_date;
+    }
+
+    public String getDraf_tor_step2_date() {
+        return draf_tor_step2_date;
+    }
+
+    public void setDraf_tor_step2_date(String draf_tor_step2_date) {
+        this.draf_tor_step2_date = draf_tor_step2_date;
+    }
+
+    public String getDraf_tor_step3_date() {
+        return draf_tor_step3_date;
+    }
+
+    public void setDraf_tor_step3_date(String draf_tor_step3_date) {
+        this.draf_tor_step3_date = draf_tor_step3_date;
+    }
+
+    public String getApprove_tor_step1_date() {
+        return approve_tor_step1_date;
+    }
+
+    public void setApprove_tor_step1_date(String approve_tor_step1_date) {
+        this.approve_tor_step1_date = approve_tor_step1_date;
+    }
+
+    public String getApprove_tor_step2_date() {
+        return approve_tor_step2_date;
+    }
+
+    public void setApprove_tor_step2_date(String approve_tor_step2_date) {
+        this.approve_tor_step2_date = approve_tor_step2_date;
+    }
+
+    public String getContest_announcement_step1_startdate() {
+        return contest_announcement_step1_startdate;
+    }
+
+    public void setContest_announcement_step1_startdate(String contest_announcement_step1_startdate) {
+        this.contest_announcement_step1_startdate = contest_announcement_step1_startdate;
+    }
+
+    public String getContest_announcement_step1_enddate() {
+        return contest_announcement_step1_enddate;
+    }
+
+    public void setContest_announcement_step1_enddate(String contest_announcement_step1_enddate) {
+        this.contest_announcement_step1_enddate = contest_announcement_step1_enddate;
+    }
+
+    public String getOpen_envelope_step1_date() {
+        return open_envelope_step1_date;
+    }
+
+    public void setOpen_envelope_step1_date(String open_envelope_step1_date) {
+        this.open_envelope_step1_date = open_envelope_step1_date;
+    }
+
+    public String getOpen_envelope_step2_startdate() {
+        return open_envelope_step2_startdate;
+    }
+
+    public void setOpen_envelope_step2_startdate(String open_envelope_step2_startdate) {
+        this.open_envelope_step2_startdate = open_envelope_step2_startdate;
+    }
+
+    public String getOpen_envelope_step2_enddate() {
+        return open_envelope_step2_enddate;
+    }
+
+    public void setOpen_envelope_step2_enddate(String open_envelope_step2_enddate) {
+        this.open_envelope_step2_enddate = open_envelope_step2_enddate;
+    }
+
+    public String getApprove_step1_startdate() {
+        return approve_step1_startdate;
+    }
+
+    public void setApprove_step1_startdate(String approve_step1_startdate) {
+        this.approve_step1_startdate = approve_step1_startdate;
+    }
+
+    public String getApprove_step1_enddate() {
+        return approve_step1_enddate;
+    }
+
+    public void setApprove_step1_enddate(String approve_step1_enddate) {
+        this.approve_step1_enddate = approve_step1_enddate;
+    }
+
+    public String getApprove_step2_startdate() {
+        return approve_step2_startdate;
+    }
+
+    public void setApprove_step2_startdate(String approve_step2_startdate) {
+        this.approve_step2_startdate = approve_step2_startdate;
+    }
+
+    public String getApprove_step2_enddate() {
+        return approve_step2_enddate;
+    }
+
+    public void setApprove_step2_enddate(String approve_step2_enddate) {
+        this.approve_step2_enddate = approve_step2_enddate;
+    }
+
+    public String getApprove_step3_date() {
+        return approve_step3_date;
+    }
+
+    public void setApprove_step3_date(String approve_step3_date) {
+        this.approve_step3_date = approve_step3_date;
+    }
+
+    public String getApprove_step4_startdate() {
+        return approve_step4_startdate;
+    }
+
+    public void setApprove_step4_startdate(String approve_step4_startdate) {
+        this.approve_step4_startdate = approve_step4_startdate;
+    }
+
+    public String getApprove_step4_enddate() {
+        return approve_step4_enddate;
+    }
+
+    public void setApprove_step4_enddate(String approve_step4_enddate) {
+        this.approve_step4_enddate = approve_step4_enddate;
+    }
+
+    public String getApprove_step5_startdate() {
+        return approve_step5_startdate;
+    }
+
+    public void setApprove_step5_startdate(String approve_step5_startdate) {
+        this.approve_step5_startdate = approve_step5_startdate;
+    }
+
+    public String getApprove_step5_enddate() {
+        return approve_step5_enddate;
+    }
+
+    public void setApprove_step5_enddate(String approve_step5_enddate) {
+        this.approve_step5_enddate = approve_step5_enddate;
+    }
+
+    public String getSign_promise_date() {
+        return sign_promise_date;
+    }
+
+    public void setSign_promise_date(String sign_promise_date) {
+        this.sign_promise_date = sign_promise_date;
+    }
+}

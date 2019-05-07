@@ -1,0 +1,82 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+
+        <ul class="breadcrumb">
+            <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">หน้าหลัก</a>
+            </li>
+            <li class="active"> ข่าวประชาสัมพันธ์ </li>
+        </ul>
+        <label style="float:right;"><% out.print(session.getAttribute("E-TRACKING-OFFICENAME"));%></label>
+    </div>
+
+    <div class="page-content">
+        <div class="page-header">
+            <h1>
+                <strong> ข่าวประชาสัมพันธ์ </strong>
+            </h1>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div>
+                    <div class="col-sm-12">
+                        <div class="widget-box" style="border:none;">
+                            <div class="widget-body">
+                                <div class="widget-main no-padding">
+                                    <div class="dialogs">
+                                        <div class="itemdiv dialogdiv" style="margin-bottom:-20px;">
+                                            <div class="timeline-label">
+                                                <!-- #section:pages/timeline.label -->
+                                                <span class="label label-primary arrowed-in-right label-lg">
+                                                    <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ข่าวประชาสัมพันธ์&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="itemdiv dialogdiv">
+                                            <div class="user">
+                                                <img alt="Alexa's Avatar" src="assets/images/avatars/news_circle.jpg" />
+                                            </div>
+                                            <div class="body" style="text-align:left;">
+                                                <div class="time">
+                                                    <i class="ace-icon fa fa-clock-o"></i>
+                                                    <span class="green">26  กันยายน 2561 : 17.00 น.</span>
+                                                </div>
+                                                <div class="name">
+                                                    <?php
+
+                                                    echo '<a href="#"> ประกาศ  </a>  ประกาศเมื่อ วันที่ 26 กันยายน 2561';
+
+                                                    ?>
+
+                                                </div>
+                                                <div class="text">
+                                                    <div style="margin-left:10px;"><font color="#FF0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทท. จะดำเนินการปิดระบบทดสอบ ในวันที่ วันที่ 26 กันยายน 2561 ตั้งแต่เวลา 18.00 น. และเปิดระบบปฏิบัติงานจริง  ในวันที่ 27 กันยายน 2561 ตั้งแต่เวลา 08.30 น.</font><br />ขอให้หน่วยงานผู้ปฏิบัติดำเนินการดังนี้<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. กำหนดสิทธิ์ผู้ใช้งานเพื่อเริ่มใช้ระบบ<br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. ให้สรรพากรภาค และสรรพากรพื้นที่ กำหนดวงเงินเก็บรักษาของสำนักงานสรรพากรพื้นที่ และสำนักงานสรรพากรพื้นที่สาขาในสังกัด <br />
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. ให้ทุกหน่วยงานบันทึกยอดยกมาตามยอดบัญชีการเบิก และจ่ายแสตมป์อากร (บ.ช.๙) ณ สิ้นวันของวันศุกร์ที่ 28 กันยายน 2561 </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+
+                        </div><!-- /.widget-box -->
+                    </div><!-- /.col -->
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </div>
+</div>
+

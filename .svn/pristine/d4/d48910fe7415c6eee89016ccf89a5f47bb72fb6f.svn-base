@@ -1,0 +1,13 @@
+#MYSQL Connection
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost
+jdbc.port=3306
+jdbc.dbname=e_budget
+jdbc.username=sa
+jdbc.password=sa
+db2.driver=com.ibm.db2.jcc.DB2Driver
+db2.url=jdbc:db2://10.26.9.27
+db2.port=50000
+db2.dbname=e_budget
+db2.username=administrator
+db2.password=p@ssw0rd

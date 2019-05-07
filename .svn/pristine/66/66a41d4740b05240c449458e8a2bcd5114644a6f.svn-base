@@ -1,0 +1,506 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="rd.ebudget.tools.MysqlManager"%>
+<%@page import="rd.ebudget.tools.Accessories"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Accessories acc = new Accessories();
+    MysqlManager mm = new MysqlManager();
+    String mode = "";
+    if (acc.IsNull(request.getParameter("project_id"))) {
+        mode = "เพิ่ม";
+    } else {
+        mode = "แก้ไข";
+    }
+%>
+
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i><a href="index.php"> หน้าหลัก </a></li>
+            <li><a href="index.php?service=projectManager"> ข้อมูลโครงการ </a></li>
+            <li> <%=mode%>โครงการ</li>
+        </ul>
+        <label style="float:right;"><% out.print(acc.IsNullToEmtyString(session.getAttribute("E-Budget-OFFICENAME")));%></label>
+    </div>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div>
+                    <div class="page-header">
+                        <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> <%=mode%>ข้อมูลโครงการ</small></h1>
+                    </div>
+                    <div id="user-profile-1" class="user-profile row">
+                        <div class="col-xs-12 col-sm-3 center">
+                            <div>
+                                <span class="profile-picture">
+                                    <img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="assets/images/avatars/project-plan-icon-128.png" style="width:256px;height:256px;"/></a>
+                                </span>
+                                <div class="space-4"></div>
+                                <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                    <div class="inline position-relative">
+                                        <b href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                            <span class="white"><%=mode%>ข้อมูลโครงการ</span>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-6"></div>
+                            <div class="hr hr16 dotted"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-9" id="infomation">
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> รายละเอียดโครงการ </small></h1>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> ชื่อโครงการ </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <input class="form-control active" type="text" id="project_name_tf">
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!---------------------------------------------------------------------------------------------------->
+                        <div class="col-xs-12 col-sm-9" >
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ความสอดคล้อง </small></h1>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name" style="width:200px;"> นโยบายรัฐบาล </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <select class="chosen-select form-control" id="government_policy_id_tf" multiple="multiple" data-placeholder="เลือกนโยบายรัฐบาล">
+                                                    <option value=""></option>
+                                                    <%
+                                                        String query = "SELECT * FROM government_policy WHERE government_policy_status='Y'";
+                                                        ResultSet rs = mm.GetDataAsResultSet(query);
+                                                        while (rs.next()) {
+                                                            out.println("<option value='" + rs.getString("government_policy_id") + "'>" + rs.getString("government_policy_name") + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name" style="width:200px;"> ยุทธศาสตร์กระทรวงการคลัง </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <select class="chosen-select form-control" id="mof_strategic_id_tf" multiple="multiple" data-placeholder="เลือกยุทธศาสตร์กระทรวงการคลัง">
+                                                    <option value=""></option>
+                                                    <%
+                                                        query = "SELECT * FROM mof_strategic WHERE mof_strategic_status='Y'";
+                                                        rs = mm.GetDataAsResultSet(query);
+                                                        while (rs.next()) {
+                                                            out.println("<option value='" + rs.getString("mof_strategic_id") + "'>" + rs.getString("mof_strategic_name") + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name" style="width:200px;"> ยุทธศาสตร์กรมสรรพากร </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <select class="chosen-select form-control" id="rd_strategic_id_tf" multiple="multiple" data-placeholder="เลือกยุทธศาสตร์กรมสรรพากร" onchange="GetRDGoal(this)">
+                                                    <option value=""></option>
+                                                    <%
+                                                        query = "SELECT * FROM rd_strategic WHERE rd_strategic_status='Y'";
+                                                        rs = mm.GetDataAsResultSet(query);
+                                                        while (rs.next()) {
+                                                            out.println("<option value='" + rs.getString("rd_strategic_id") + "'>" + rs.getString("rd_strategic_name") + "</option>");
+                                                        }
+                                                    %>
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name" style="width:200px;"> เป้าประสงค์ </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <select class="chosen-select form-control" id="rd_goal_id_tf" multiple="multiple" data-placeholder="เลือกเป้าประสงค์" onchange="GetRDTactics(this)">
+
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name" style="width:200px;"> กลยุทธ์ </div>
+
+                                    <div class="profile-info-value">
+                                        <span id="fullname_tf">
+                                            <div class="input-group col-sm-12">
+                                                <select class="chosen-select form-control" id="rd_tactics_id_tf" multiple="multiple" data-placeholder="เลือกกลยุทธ์">
+
+                                                </select>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ผู้ติดต่อประสานงาน </small></h1>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div id="project_owner">
+                                <div id="owner_project_info">
+                                    <div class="profile-user-info profile-user-info-striped">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name" style="width:100px;"> เลข ลสก. </div>
+                                            <div class="profile-info-value" style="width:200px;">
+                                                <span id="fullname_tf">
+                                                    <div class="input-group col-sm-12">
+                                                        <input class="form-control active" type="text" name="uid_tf[]">
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <div class="profile-info-value" style="width:80px;vertical-align:middle;">
+                                                <span>
+                                                    <div class="input-group col-sm-12">
+                                                        <button class="btn btn-white btn-warning btn-sm" style="height:30px;" onclick="GetUserEoffice(this)">
+                                                            <i class="ace-icon fa fa-search bigger-120 orange"></i> ค้นหา
+                                                        </button>
+                                                    </div> 
+
+                                                </span>
+                                            </div>
+                                            <div class="profile-info-name" style="width:100px;"> ชื่อ-สกุล </div>
+                                            <div class="profile-info-value">
+                                                <span id="fullname_tf">
+                                                    <div class="input-group col-sm-12">
+                                                        <input class="form-control active" type="text" name="fullname_tf[]" disabled="disabled">
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-user-info profile-user-info-striped">
+                                        <div class="profile-info-row">
+                                            <div class="profile-info-name" style="width:100px;"> ตำแหน่ง </div>
+                                            <div class="profile-info-value" style="width:300px;">
+                                                <span id="fullname_tf">
+                                                    <div class="input-group col-sm-12">
+                                                        <input class="form-control active" type="text" name="position_m_tf[]" disabled="disabled">
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="profile-info-name" style="width:100px;"> E-Mail </div>
+                                            <div class="profile-info-value" style="width:300px;">
+                                                <span id="fullname_tf">
+                                                    <div class="input-group col-sm-12">
+                                                        <input class="form-control active" type="text" name="email_tf[]" disabled="disabled">
+                                                    </div>
+                                                </span>
+                                            </div>
+                                            <div class="profile-info-value" style="width:60px;vertical-align:middle;">
+                                                <span>
+                                                    <div class="input-group col-sm-12">
+                                                        <button class="btn btn-white btn-danger btn-sm" style="height:30px;" onclick="DeleteOwnerProject(this)">
+                                                            <i class="ace-icon fa fa-trash bigger-120 red"></i> ลบ
+                                                        </button>
+                                                    </div> 
+
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="border:none;">
+                                <div style="margin-top:5px;">
+                                    <button class="btn btn-white btn-warning btn-bold btn-sm" onclick="AddingOwnerProject()">
+                                        <i class="ace-icon fa fa-plus"></i> เพิ่มรายการ 
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> วัตถุประสงค์ </small></h1>
+                            </div>
+                            <div id="project_objective">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:100px;"> วัตถุประสงค์</div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control activee" type="text" name="project_objective_tf[]">
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="border:none;">
+                                <div style="margin-top:5px;">
+                                    <button class="btn btn-white btn-warning btn-bold btn-sm" onclick="AddingProjectObjective()">
+                                        <i class="ace-icon fa fa-plus"></i> เพิ่มรายการ 
+                                    </button>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ผลผลิตของโครงการ (Output) </small></h1>
+                            </div>
+                            <div id="project_output">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> ผลผลิตของโครงการ (Output) </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control active" type="text" name="project_output_tf[]">
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="border:none;">
+                                <div style="margin-top:5px;">
+                                    <button class="btn btn-white btn-warning btn-bold btn-sm" onclick="AddingProjectOutput()">
+                                        <i class="ace-icon fa fa-plus"></i> เพิ่มรายการ 
+                                    </button>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ผลลัพธ์ของโครงการ (Outcome) </small></h1>
+                            </div>
+                            <div id="project_outcome">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> ผลลัพธ์ของโครงการ (Outcome) </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control active" type="text" name="project_outcome_tf[]">
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="border:none;">
+                                <div style="margin-top:5px;">
+                                    <button class="btn btn-white btn-warning btn-bold btn-sm" onclick="AddingProjectOutcome()">
+                                        <i class="ace-icon fa fa-plus"></i> เพิ่มรายการ 
+                                    </button>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ระยะเวลาดำเนินโครงการ </small></h1>
+                            </div>
+                            <div id="project_owner">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> วันที่เริ่มต้น </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control active date-picker center" id="project_start_date_tf" type="text" data-date-format="dd-mm-yyyy">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="profile-info-name" style="width:200px;"> วันที่สิ้นสุด </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control active date-picker center" id="project_end_date_tf" type="text" data-date-format="dd-mm-yyyy">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ลักษณะโครงการ </small></h1>
+                            </div>
+                            <div id="project_owner">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> ลักษณะโครงการ </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <div class="control-group">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input name="project_type_tf" type="radio" class="ace" value="1">
+                                                                <span class="lbl"> โครงการต่อเนื่อง</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <div class="control-group">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input name="project_type_tf" type="radio" class="ace" value="2">
+                                                                <span class="lbl"> โครงการใหม่ </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="page-header">
+                                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ประโยชน์ที่คาดว่าจะได้รับ </small></h1>
+                            </div>
+                            <div id="project_benefit">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> ประโยชน์ที่คาดว่าจะได้รับ </div>
+                                        <div class="profile-info-value">
+                                            <span id="fullname_tf">
+                                                <div class="input-group col-sm-12">
+                                                    <input class="form-control active" type="text" name="project_benefit_tf[]">
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-user-info profile-user-info-striped" style="border:none;">
+                                <div style="margin-top:5px;">
+                                    <button class="btn btn-white btn-warning btn-bold btn-sm" onclick="AddingProjectBenefit()">
+                                        <i class="ace-icon fa fa-plus"></i> เพิ่มรายการ 
+                                    </button>
+                                </div>
+                            </div>
+                            <!---------------------------------------------------------------------------------------------------->
+                            <div class="space-10"></div>
+                            <div class="center">
+                                <button class="btn btn-success btn-white" onclick="ProjectAdding()" id="userAdd_b"><i class="ace-icon fa fa-user"></i> บันทึก </button>
+                                <button class="btn btn-danger btn-white" onclick="Goto('projectManager')" ><i class="ace-icon fa fa-times"></i> ยกเลิก </button>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-xs-12 col-sm-9" id="infomation3">
+
+
+                            <!-- /section:pages/profile.info -->
+                            <div class="space-10"></div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+</div>
+<link rel="stylesheet" href="assets/css/jquery-ui.custom.min.css" />
+<link rel="stylesheet" href="assets/css/chosen.min.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-datepicker3.min.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-timepicker.min.css" />
+<link rel="stylesheet" href="assets/css/daterangepicker.min.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-colorpicker.min.css" />
+
+<script>
+    $(document).ready(function () {
+        if (!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect: true});
+            //resize the chosen on window resize
+
+            $(window)
+                    .off('resize.chosen')
+                    .on('resize.chosen', function () {
+                        $('.chosen-select').each(function () {
+                            var $this = $(this);
+                            $this.next().css({'width': $this.parent().width()});
+                        })
+                    }).trigger('resize.chosen');
+            //resize chosen on sidebar collapse/expand
+            $(document).on('settings.ace.chosen', function (e, event_name, event_val) {
+                if (event_name != 'sidebar_collapsed')
+                    return;
+                $('.chosen-select').each(function () {
+                    var $this = $(this);
+                    $this.next().css({'width': $this.parent().width()});
+                })
+            });
+        }
+        $('.date-picker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        })
+                //show datepicker when clicking on the icon
+                .next().on(ace.click_event, function () {
+            $(this).prev().focus();
+        });
+    });
+</script>
+<script src="assets/js/jquery-ui.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/chosen.jquery.min.js"></script>
+<script src="assets/js/spinbox.min.js"></script>
+<script src="assets/js/bootstrap-datepicker.min.js"></script>
+<script src="assets/js/bootstrap-timepicker.min.js"></script>
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/daterangepicker.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script src="assets/js/bootstrap-colorpicker.min.js"></script>
+<script src="assets/js/jquery.knob.min.js"></script>
+<script src="assets/js/autosize.min.js"></script>
+<script src="assets/js/jquery.inputlimiter.min.js"></script>
+<script src="assets/js/jquery.maskedinput.min.js"></script>
+<script src="assets/js/bootstrap-tag.min.js"></script>

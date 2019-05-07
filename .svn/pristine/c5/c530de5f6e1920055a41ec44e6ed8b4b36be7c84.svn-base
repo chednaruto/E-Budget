@@ -1,0 +1,104 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rd.ebudget.object;
+
+/**
+ *
+ * @author Mr.Tue
+ */
+public class Project {
+    private String project_id;
+    private String project_name;
+    private String office_code;
+    private String project_type_id;
+    private String project_start_date;
+    private String project_end_date;
+
+    /**
+     * @return the project_id
+     */
+    public String getProject_id() {
+        return project_id;
+    }
+
+    /**
+     * @param project_id the project_id to set
+     */
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    /**
+     * @return the project_name
+     */
+    public String getProject_name() {
+        return project_name;
+    }
+
+    /**
+     * @param project_name the project_name to set
+     */
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
+    }
+
+    /**
+     * @return the office_code
+     */
+    public String getOffice_code() {
+        return office_code;
+    }
+
+    /**
+     * @param office_code the office_code to set
+     */
+    public void setOffice_code(String office_code) {
+        this.office_code = office_code;
+    }
+
+    /**
+     * @return the project_type_id
+     */
+    public String getProject_type_id() {
+        return project_type_id;
+    }
+
+    /**
+     * @param project_type_id the project_type_id to set
+     */
+    public void setProject_type_id(String project_type_id) {
+        this.project_type_id = project_type_id;
+    }
+
+    /**
+     * @return the project_start_date
+     */
+    public String getProject_start_date() {
+        return project_start_date;
+    }
+
+    /**
+     * @param project_start_date the project_start_date to set
+     */
+    public void setProject_start_date(String project_start_date) {
+        this.project_start_date = project_start_date;
+    }
+
+    /**
+     * @return the project_end_date
+     */
+    public String getProject_end_date() {
+        return project_end_date;
+    }
+
+    /**
+     * @param project_end_date the project_end_date to set
+     */
+    public void setProject_end_date(String project_end_date) {
+        this.project_end_date = project_end_date;
+    }
+
+}

@@ -1,0 +1,50 @@
+package rd.ebudget.object.Budget;
+
+import rd.ebudget.tools.DB2Manager;
+
+public class ProjectRDStrategic {
+
+    private String project_id;
+    private int rd_strategic_id;
+
+    public boolean InsertProjectRDStrategic(ProjectRDStrategic prs) {
+        boolean ret = false;
+        try {
+            String query = "INSERT INTO e_budget.project_rd_strategic() VALUES('" + prs.getProject_id() + "'," + prs.getRd_strategic_id() + ") ";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean DeleteProjectRDStrategic(ProjectRDStrategic prs) {
+        boolean ret = false;
+        try {
+            String query = "DELETE * FROM e_budget.project_rd_strategic WHERE project_id='" + prs.getProject_id() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public String getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    public int getRd_strategic_id() {
+        return rd_strategic_id;
+    }
+
+    public void setRd_strategic_id(int rd_strategic_id) {
+        this.rd_strategic_id = rd_strategic_id;
+    }
+
+}

@@ -1,0 +1,66 @@
+
+package rd.ebudget.object.lookup.Gov;
+
+public class RdTactics {
+    private String rd_tactics_id;
+    private String rd_tactics_name;
+    private String rd_tactics_status;
+    private String rd_goal_id;
+
+    /**
+     * @return the rd_tactics_id
+     */
+    public String getRd_tactics_id() {
+        return rd_tactics_id;
+    }
+
+    /**
+     * @param rd_tactics_id the rd_tactics_id to set
+     */
+    public void setRd_tactics_id(String rd_tactics_id) {
+        this.rd_tactics_id = rd_tactics_id;
+    }
+
+    /**
+     * @return the rd_tactics_name
+     */
+    public String getRd_tactics_name() {
+        return rd_tactics_name;
+    }
+
+    /**
+     * @param rd_tactics_name the rd_tactics_name to set
+     */
+    public void setRd_tactics_name(String rd_tactics_name) {
+        this.rd_tactics_name = rd_tactics_name;
+    }
+
+    /**
+     * @return the rd_tactics_status
+     */
+    public String getRd_tactics_status() {
+        return rd_tactics_status;
+    }
+
+    /**
+     * @param rd_tactics_status the rd_tactics_status to set
+     */
+    public void setRd_tactics_status(String rd_tactics_status) {
+        this.rd_tactics_status = rd_tactics_status;
+    }
+
+    /**
+     * @return the rd_goal_id
+     */
+    public String getRd_goal_id() {
+        return rd_goal_id;
+    }
+
+    /**
+     * @param rd_goal_id the rd_goal_id to set
+     */
+    public void setRd_goal_id(String rd_goal_id) {
+        this.rd_goal_id = rd_goal_id;
+    }
+
+}

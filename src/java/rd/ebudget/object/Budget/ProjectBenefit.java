@@ -1,0 +1,60 @@
+package rd.ebudget.object.Budget;
+
+import rd.ebudget.tools.DB2Manager;
+
+public class ProjectBenefit {
+
+    private int project_benefit_id;
+    private String project_benefit_name;
+    private String project_id;
+
+    public boolean InsertProjectBenefit(ProjectBenefit pb) {
+        boolean ret = false;
+        try {
+            String query = "INSERT INTO e_budget.project_benefit(project_benefit_id,project_benefit_name,project_id) "
+                    + "VALUES(" + pb.getProject_benefit_id() + ",'" + pb.getProject_benefit_name() + "','" + pb.getProject_id() + "')";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean DeleteProjectBenefit(ProjectBenefit pb) {
+        boolean ret = false;
+        try {
+            String query = "DELETE FROM e_budget.project_benefit WHERE project_id='" + pb.getProject_id() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public int getProject_benefit_id() {
+        return project_benefit_id;
+    }
+
+    public void setProject_benefit_id(int project_benefit_id) {
+        this.project_benefit_id = project_benefit_id;
+    }
+
+    public String getProject_benefit_name() {
+        return project_benefit_name;
+    }
+
+    public void setProject_benefit_name(String project_benefit_name) {
+        this.project_benefit_name = project_benefit_name;
+    }
+
+    public String getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+}

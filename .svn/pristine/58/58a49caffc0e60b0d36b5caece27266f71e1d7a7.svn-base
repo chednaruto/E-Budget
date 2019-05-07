@@ -1,0 +1,35 @@
+package rd.ebudget.object.projectManagement;
+
+public class ProjectRdTactics {
+    private String project_id;
+    private String rd_tactics_id;
+
+    /**
+     * @return the project_id
+     */
+    public String getProject_id() {
+        return project_id;
+    }
+
+    /**
+     * @param project_id the project_id to set
+     */
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    /**
+     * @return the rd_tactics_id
+     */
+    public String getRd_tactics_id() {
+        return rd_tactics_id;
+    }
+
+    /**
+     * @param rd_tactics_id the rd_tactics_id to set
+     */
+    public void setRd_tactics_id(String rd_tactics_id) {
+        this.rd_tactics_id = rd_tactics_id;
+    }
+
+}

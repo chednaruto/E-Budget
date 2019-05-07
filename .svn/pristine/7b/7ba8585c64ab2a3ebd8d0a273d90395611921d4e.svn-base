@@ -1,0 +1,89 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rd.ebudget.object;
+
+/**
+ *
+ * @author Mr.Tue
+ */
+public class ProjectOwner {
+    private String project_id;
+    private String uid;
+    private String fullname;
+    private String position_m;
+    private String email;
+
+    /**
+     * @return the project_id
+     */
+    public String getProject_id() {
+        return project_id;
+    }
+
+    /**
+     * @param project_id the project_id to set
+     */
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    /**
+     * @return the uid
+     */
+    public String getUid() {
+        return uid;
+    }
+
+    /**
+     * @param uid the uid to set
+     */
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    /**
+     * @return the fullname
+     */
+    public String getFullname() {
+        return fullname;
+    }
+
+    /**
+     * @param fullname the fullname to set
+     */
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    /**
+     * @return the position_m
+     */
+    public String getPosition_m() {
+        return position_m;
+    }
+
+    /**
+     * @param position_m the position_m to set
+     */
+    public void setPosition_m(String position_m) {
+        this.position_m = position_m;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+}

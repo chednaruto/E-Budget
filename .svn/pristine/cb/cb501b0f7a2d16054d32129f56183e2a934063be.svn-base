@@ -1,0 +1,50 @@
+package rd.ebudget.object.lookup.Gov;
+
+public class GovernmentPolicy {
+    private String government_policy_id;
+    private String government_policy_name;
+    private String government_policy_status;
+
+    /**
+     * @return the government_policy_id
+     */
+    public String getGovernment_policy_id() {
+        return government_policy_id;
+    }
+
+    /**
+     * @param government_policy_id the government_policy_id to set
+     */
+    public void setGovernment_policy_id(String government_policy_id) {
+        this.government_policy_id = government_policy_id;
+    }
+
+    /**
+     * @return the government_policy_name
+     */
+    public String getGovernment_policy_name() {
+        return government_policy_name;
+    }
+
+    /**
+     * @param government_policy_name the government_policy_name to set
+     */
+    public void setGovernment_policy_name(String government_policy_name) {
+        this.government_policy_name = government_policy_name;
+    }
+
+    /**
+     * @return the government_policy_status
+     */
+    public String getGovernment_policy_status() {
+        return government_policy_status;
+    }
+
+    /**
+     * @param government_policy_status the government_policy_status to set
+     */
+    public void setGovernment_policy_status(String government_policy_status) {
+        this.government_policy_status = government_policy_status;
+    }
+
+}

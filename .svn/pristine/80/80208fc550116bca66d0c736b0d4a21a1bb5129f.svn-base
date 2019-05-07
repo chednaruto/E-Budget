@@ -1,0 +1,84 @@
+package rd.ebudget.tools;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import javax.servlet.http.HttpServletRequest;
+
+public class Accessories {
+
+    public boolean IsNull(Object value) {
+        return (value == null) ? (true) : (false);
+    }
+
+    public boolean IsEquals(Object ojb, String value) {
+        return (ojb != null && ojb.equals(value)) ? (true) : (false);
+    }
+
+    public boolean IsEqualsInList(Object obj, String[] value) {
+        boolean ret = false;
+        if (obj != null) {
+            for (int i = 0; i < value.length; i++) {
+                if (value[i].equals(obj)) {
+                    ret = true;
+                }
+            }
+        } else {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public String IsNullToEmtyString(Object value) {
+        return (value == null) ? "" : value.toString();
+    }
+
+    
+    
+    public String GetThaiDate(String strDate) {
+        String ret = null;
+        try {
+            String Months[] = {"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"};
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            int year = 0, month = 0, day = 0;
+            Date date = df.parse(strDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DATE);
+            ret = String.format("%s %s %s", day, Months[month], year + 543);
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+
+    public String NumberFormat(Object value, String format) {
+        String ret = null;
+        try {
+            DecimalFormat df = new DecimalFormat(format);
+            ret = df.format(value);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ret;
+    }
+
+    public void ListRequest(HttpServletRequest request) {
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            System.out.print(paramName +" : ");
+            String[] paramValues = request.getParameterValues(paramName);
+            for (int i = 0; i < paramValues.length; i++) {
+                String paramValue = paramValues[i];
+                System.out.println(paramValue);
+            }
+        }
+    }
+}

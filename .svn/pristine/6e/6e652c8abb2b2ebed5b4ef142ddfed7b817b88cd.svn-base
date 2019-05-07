@@ -1,0 +1,289 @@
+package rd.ebudget.tools;
+
+import java.sql.ResultSet;
+import rd.ebudget.object.Budget.EBiddingResult;
+import rd.ebudget.object.Budget.EMarketResult;
+
+public class EBudgetTools {
+
+    public boolean CheckBalance(int disbursement_category_id, String officeid, double total_budget) {
+        boolean ret = false;
+        try {
+            String query = "SELECT bt.budget_type_id,bt.budget_type_name,bc.budget_category_id,bc.budget_category_name,"
+                    + "SUM(CASE WHEN t.tb_source IN('receive_budget','receive_tranfer_budget','receive_change_budget') THEN t.budget_total ELSE 0 END) receive_total,"
+                    + "SUM(CASE WHEN t.tb_source IN('tranfer_budget','change_budget','allocate_budget') THEN t.budget_total ELSE 0 END) used_total,dc.disbursement_category_id,dc.disbursement_category_name "
+                    + "FROM ( "
+                    + " 	select 'receive_budget' as tb_source,"
+                    + "    	TIMESTAMP(rb.budget_receive_date,'00:00:00') As transaction_datetime,"
+                    + "    	'' AS detail,"
+                    + "    	rb.budget_total,"
+                    + "	rb.disbursement_category_id "
+                    + "    	from e_budget.receive_budget rb "
+                    + "    	where rb.officeid = '" + officeid + "' "
+                    + "    	UNION "
+                    + "    	select 'tranfer_budget' AS tb_source,"
+                    + "    	tb.tranfer_budget_datetime AS transaction_datetime,"
+                    + "    	of.officename AS detail,"
+                    + "    	tb.budget_total,"
+                    + "	tb.disbursement_category_id "
+                    + "    	from e_budget.tranfer_budget tb "
+                    + "    	left join e_budget.office of ON tb.to_officeid = of.officeid "
+                    + "    	where tb.from_officeid = '" + officeid + "' "
+                    + "    	UNION "
+                    + "    	select 'receive_tranfer_budget' AS tb_source,"
+                    + "    	tb.tranfer_budget_datetime AS transaction_datetime,"
+                    + "    	of.officename as detail,"
+                    + "    	tb.budget_total,"
+                    + "	tb.disbursement_category_id "
+                    + " 	from e_budget.tranfer_budget tb "
+                    + "    	left join e_budget.office of ON tb.from_officeid = officeid "
+                    + "    	where tb.to_officeid = '" + officeid + "' "
+                    + "   	UNION"
+                    + "    	select 'change_budget' AS tb_source,"
+                    + "    	cb.change_budget_datetime AS transaction_datetime,"
+                    + "    	bc.disbursement_category_name AS detail,"
+                    + "    	cb.budget_total,"
+                    + "     cb.from_disbursement_category_id as disbursement_category_id "
+                    + " 	from e_budget.change_budget cb "
+                    + "   	LEFT JOIN e_budget.disbursement_category bc On cb.to_disbursement_category_id = disbursement_category_id "
+                    + "    	WHERE cb.officeid = '" + officeid + "' "
+                    + "     UNION "
+                    + "    	select 'receive_change_budget' as tb_source,"
+                    + "    	cb.change_budget_datetime as transaction_datetime,"
+                    + "    	bc.disbursement_category_name as detail,"
+                    + "    	cb.budget_total,"
+                    + "	cb.to_disbursement_category_id as disbursement_category_id "
+                    + "	from e_budget.change_budget cb "
+                    + "    	left join e_budget.disbursement_category bc ON cb.from_disbursement_category_id = bc.disbursement_category_id "
+                    + "   	where cb.officeid= '" + officeid + "' "
+                    + "    	UNION "
+                    + "    	SELECT 'allocate_budget' AS tb_source,ab.allocate_budget_datetime AS transaction_datetime,p.project_name AS detail,"
+                    + "    	ab.allocate_budget_total AS  budget_total,disbursement_category_id "
+                    + "	FROM e_budget.allocate_budget ab LEFT JOIN e_budget.project p ON ab.project_id = p.project_id "
+                    + "     WHERE ab.officeid= '" + officeid + "' "
+                    + ") as t  "
+                    + "left join e_budget.disbursement_category dc ON t.disbursement_category_id = dc.disbursement_category_id "
+                    + "left join e_budget.budget_category bc ON dc.budget_category_id = bc.budget_category_id "
+                    + "left join e_budget.budget_type bt ON bc.budget_type_id = bt.budget_type_id "
+                    + "WHERE t.disbursement_category_id=" + disbursement_category_id + " "
+                    + "group by bt.budget_type_id,bt.budget_type_name,bc.budget_category_id,bc.budget_category_name,dc.disbursement_category_id,dc.disbursement_category_name";
+            DB2Manager dbms = new DB2Manager();
+            ResultSet rs = dbms.GetDataAsResultSet(query);
+            if (rs.next()) {
+                double receive_total = rs.getDouble("receive_total");
+                double used_total = rs.getDouble("receive_total");
+                if (Double.compare((used_total + total_budget), receive_total) == 1) {
+                    ret = true;
+                } else {
+                    ret = false;
+                }
+            }
+            rs.close();
+            dbms.closeConnection();
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+
+    public String getProjectStatus(String project_id) {
+        String ret = "รออนุมัติโครงการ";
+        try {
+            DB2Manager dbms = new DB2Manager();
+            Accessories acc = new Accessories();
+            int purchase_sub_type_id = 0;
+            String query = "SELECT * FROM e_budget.project WHERE project_id = '" + project_id + "'";
+            ResultSet rs = dbms.GetDataAsResultSet(query);
+
+            if (rs.next()) {
+                purchase_sub_type_id = rs.getInt("purchase_sub_type_id");
+                String table = "";
+                if (purchase_sub_type_id == 1) {
+                    table = "e_market_result ";
+                } else if (purchase_sub_type_id == 2) {
+                    table = "e_bidding_result ";
+                } else if (purchase_sub_type_id == 3) {
+                    table = "selection_method_result ";
+                } else if (purchase_sub_type_id == 4) {
+                    table = "specific_method_result ";
+                }
+                if (purchase_sub_type_id == 1) {
+                    query = "SELECT * FROM e_budget.term_of_payment_result WHERE project_id='" + project_id + "' ORDER BY term_of_payment_result_payment_date DESC FETCH FIRST 1 ROW ONLY";
+                    rs = dbms.GetDataAsResultSet(query);
+                    if (rs.next()) {
+                        ret = "เบิกจ่ายงวดงานที่ " + rs.getString("term_of_payment_id");
+                    } else {
+                        query = "SELECT * FROM e_budget." + table + " WHERE project_id = '" + project_id + "'";
+                        rs = dbms.GetDataAsResultSet(query);
+                        if (rs.next()) {
+                            if (!acc.IsNullToEmtyString(rs.getString("sign_promise_date")).isEmpty()) {
+                                ret = "ลงนาในสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step5_startdate")).isEmpty()) {
+                                ret = "เปิดทำสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step4_startdate")).isEmpty()) {
+                                ret = "รออุทธรณ์";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_date")).isEmpty()) {
+                                ret = "ประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_date")).isEmpty()) {
+                                ret = "เสนอกระทรวงอนุมัติ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step2_startdate")).isEmpty()) {
+                                ret = "เสนอกระทรวงอนุมัติ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step1_startdate")).isEmpty()) {
+                                ret = "เสนอกรม ฯ ให้ความเห็นชอบ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("open_envelope_step2_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการพิจารณาผลเปิดซอง";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("open_envelope_step1_date")).isEmpty()) {
+                                ret = "เสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("contest_announcement_step4_startdate")).isEmpty()) {
+                                ret = "ลงประกาศประกวดราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("contest_announcement_step3_date")).isEmpty()) {
+                                ret = "กรม ฯ อนุมัติ ลงนามประกาศเผยแพร่";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("contest_announcement_step2_date")).isEmpty()) {
+                                ret = "เสนอกรม ฯ เพื่อลงนามและเผยแพร่";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("contest_announcement_step1_date")).isEmpty()) {
+                                ret = "เสนอรายงานตามระเบียบ ฯ ข้อ 22";
+                            }
+                        }
+                    }
+                } else if (purchase_sub_type_id == 2) {
+                    table = "e_bidding_result ";
+                    query = "SELECT * FROM e_budget.term_of_payment_result WHERE project_id='" + project_id + "' ORDER BY term_of_payment_result_payment_date DESC FETCH FIRST 1 ROW ONLY";
+                    rs = dbms.GetDataAsResultSet(query);
+                    if (rs.next()) {
+                        ret = "เบิกจ่ายงวดงานที่ " + rs.getString("term_of_payment_id");
+                    } else {
+                        query = "SELECT * FROM e_budget." + table + " WHERE project_id = '" + project_id + "'";
+                        rs = dbms.GetDataAsResultSet(query);
+                        if (rs.next()) {
+                            if (!acc.IsNullToEmtyString(rs.getString("sign_promise_date")).isEmpty()) {
+                                ret = "ลงนาในสัญญา";
+
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step5_startdate")).isEmpty()) {
+                                ret = "เปิดทำสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step4_startdate")).isEmpty()) {
+                                ret = "รออุทธรณ์";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_date")).isEmpty()) {
+                                ret = "ประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_date")).isEmpty()) {
+                                ret = "เสนอกระทรวงอนุมัติ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step2_startdate")).isEmpty()) {
+                                ret = "เสนอกระทรวงอนุมัติ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step1_startdate")).isEmpty()) {
+                                ret = "เสนอกรม ฯ ให้ความเห็นชอบ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("open_envelope_step2_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการพิจารณาผลเปิดซอง";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("open_envelope_step1_date")).isEmpty()) {
+                                ret = "เสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("contest_announcement_step1_startdate")).isEmpty()) {
+                                ret = "ลงประกาศประกวดราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_tor_step2_date")).isEmpty()) {
+                                ret = "กรม ฯ อนุมัติ ลงนามประกาศเผยแพร่ TOR";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("draf_tor_step3_date")).isEmpty()) {
+                                ret = "เสนอรายงานตามระเบียบ ฯ ข้อ 22";
+                                query = "SELECT *  FROM e_budget.e_bidding_result_tor_loop WHERE project_id='" + project_id + "' ORDER BY e_bidding_result_tor_loop_id DESC fetch first 1 row only";
+                                rs = dbms.GetDataAsResultSet(query);
+                                if (rs.next()) {
+                                    System.out.println(rs.getString("e_bidding_result_tor_loop_id"));
+                                    if (acc.IsNullToEmtyString(rs.getString("e_bidding_result_tor_loop_step5_status")).equals("Y")) {
+                                        ret = "เสนอปรับปรุงร่าง";
+                                    } else if (!acc.IsNullToEmtyString(rs.getString("e_bidding_result_tor_loop_step4_date")).isEmpty()) {
+                                        ret = "คณะกรรมการ ฯ รายงานผลการวิจารณ์ ";
+                                    } else if (!acc.IsNullToEmtyString(rs.getString("e_bidding_result_tor_loop_step3_date")).isEmpty()) {
+                                        ret = "ส่งรายละเอียดการวิจารณ์ให้คณะกรรมการ ฯ ";
+                                    } else if (!acc.IsNullToEmtyString(rs.getString("e_bidding_result_tor_loop_step1_startdate")).isEmpty()) {
+                                        ret = "ลงประกาศร่าง TOR ครั่งที่ " + rs.getString("e_bidding_result_tor_loop_id");
+                                    }
+                                }
+                            } else if (!acc.IsNullToEmtyString(rs.getString("draf_tor_step2_date")).isEmpty()) {
+                                ret = "คณะกรรมการส่งคืนเอกสาร";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("draf_tor_step1_date")).isEmpty()) {
+                                ret = "แต่งตั้งคณะกรรมการจัดทำรายละเอียดคุณลักษณะเฉพาะ";
+                            }
+                        }
+                    }
+                } else if (purchase_sub_type_id == 3) {
+                    query = "SELECT * FROM e_budget.term_of_payment_result WHERE project_id='" + project_id + "' ORDER BY term_of_payment_result_payment_date DESC FETCH FIRST 1 ROW ONLY";
+                    rs = dbms.GetDataAsResultSet(query);
+                    if (rs.next()) {
+                        ret = "เบิกจ่ายงวดงานที่ " + rs.getString("term_of_payment_id");
+                    } else {
+                        query = "SELECT * FROM e_budget." + table + " WHERE project_id = '" + project_id + "'";
+                        rs = dbms.GetDataAsResultSet(query);
+                        if (rs.next()) {
+                            if (!acc.IsNullToEmtyString(rs.getString("sign_promise_date")).isEmpty()) {
+                                ret = "ลงนามสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step4_startdate")).isEmpty()) {
+                                ret = "เปิดทำสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_startdate")).isEmpty()) {
+                                ret = "รออุทธรณ์";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step2_date")).isEmpty()) {
+                                ret = "ประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step1_date")).isEmpty()) {
+                                ret = "กรม ฯ ให้ความเห็นชอบ อนุมัติ ลงนามประกาศผู้ชนะ ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step3_date")).isEmpty()) {
+                                ret = "เสนอกรม ฯ ให้ความเห็นชอบ อนุมัติ ลงนามประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step2_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการ ฯ พิจารณาผลการเสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step1_date")).isEmpty()) {
+                                ret = "ผู้เสนอราคายื่นเอกสารเสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step4_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการ ฯ มีหนีงสือเชิญชวนผู้เสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step3_date")).isEmpty()) {
+                                ret = "ส่งคำสั่งแต่งตั้งคณะกรรมการซื้อหรือจ้างโดยวิธีคัดเลือก";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step2_date")).isEmpty()) {
+                                ret = "กรมอนุมัติ";
+                            }else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step1_date")).isEmpty()) {
+                                ret = "เสนอรายงานตามระเบียบ ฯ ข้อ 22";
+                            }else{
+                                ret = "อนุมัติโครงการ";
+                            }
+                        }
+                    }
+                } else if (purchase_sub_type_id == 4) {
+                    table = "specific_method_result ";
+                    query = "SELECT * FROM e_budget.term_of_payment_result WHERE project_id='" + project_id + "' ORDER BY term_of_payment_result_payment_date DESC FETCH FIRST 1 ROW ONLY";
+                    rs = dbms.GetDataAsResultSet(query);
+                    if (rs.next()) {
+                        ret = "เบิกจ่ายงวดงานที่ " + rs.getString("term_of_payment_id");
+                    } else {
+                        query = "SELECT * FROM e_budget." + table + " WHERE project_id = '" + project_id + "'";
+                        rs = dbms.GetDataAsResultSet(query);
+                        if (rs.next()) {
+                            if (!acc.IsNullToEmtyString(rs.getString("sign_promise_date")).isEmpty()) {
+                                ret = "ลงนามสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step4_startdate")).isEmpty()) {
+                                ret = "เปิดทำสัญญา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step3_startdate")).isEmpty()) {
+                                ret = "รออุทธรณ์";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step2_date")).isEmpty()) {
+                                ret = "ประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("approve_step1_date")).isEmpty()) {
+                                ret = "กรม ฯ ให้ความเห็นชอบ อนุมัติ ลงนามประกาศผู้ชนะ ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step3_date")).isEmpty()) {
+                                ret = "เสนอกรม ฯ ให้ความเห็นชอบ อนุมัติ ลงนามประกาศผู้ชนะ";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step2_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการ ฯ พิจารณาผลการเสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("board_review_step1_date")).isEmpty()) {
+                                ret = "ผู้เสนอราคายื่นเอกสารเสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step4_startdate")).isEmpty()) {
+                                ret = "คณะกรรมการ ฯ มีหนีงสือเชิญชวนผู้เสนอราคา";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step3_date")).isEmpty()) {
+                                ret = "ส่งคำสั่งแต่งตั้งคณะกรรมการซื้อหรือจ้างโดยวิธีคัดเลือก";
+                            } else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step2_date")).isEmpty()) {
+                                ret = "กรมอนุมัติ";
+                            }else if (!acc.IsNullToEmtyString(rs.getString("invitation_announcement_step1_date")).isEmpty()) {
+                                ret = "เสนอรายงานตามระเบียบ ฯ ข้อ 22";
+                            }else{
+                                ret = "อนุมัติโครงการ";
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return ret;
+    }
+
+}

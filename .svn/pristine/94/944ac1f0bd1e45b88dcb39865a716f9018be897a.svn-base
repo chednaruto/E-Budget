@@ -1,0 +1,59 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rd.ebudget.object.projectManagement;
+
+/**
+ *
+ * @author Mr.Tue
+ */
+public class ProjectBenefit {
+    private String project_benefit_id;
+    private String project_benefit_name;
+    private String project_id;
+
+    /**
+     * @return the project_benefit_id
+     */
+    public String getProject_benefit_id() {
+        return project_benefit_id;
+    }
+
+    /**
+     * @param project_benefit_id the project_benefit_id to set
+     */
+    public void setProject_benefit_id(String project_benefit_id) {
+        this.project_benefit_id = project_benefit_id;
+    }
+
+    /**
+     * @return the project_benefit_name
+     */
+    public String getProject_benefit_name() {
+        return project_benefit_name;
+    }
+
+    /**
+     * @param project_benefit_name the project_benefit_name to set
+     */
+    public void setProject_benefit_name(String project_benefit_name) {
+        this.project_benefit_name = project_benefit_name;
+    }
+
+    /**
+     * @return the project_id
+     */
+    public String getProject_id() {
+        return project_id;
+    }
+
+    /**
+     * @param project_id the project_id to set
+     */
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+}

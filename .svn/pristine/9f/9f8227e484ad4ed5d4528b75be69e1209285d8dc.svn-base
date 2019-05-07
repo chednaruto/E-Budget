@@ -1,0 +1,201 @@
+<%@page import="rd.ebudget.tools.DB2Manager"%>
+<%@page import="rd.ebudget.object.lookup.Gov.MofStrategic"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="rd.ebudget.tools.MysqlManager"%>
+<%@page import="rd.ebudget.tools.Accessories"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% Accessories acc = new Accessories();%>
+<%
+    String tag = "";
+    String project_id = acc.IsNullToEmtyString(request.getParameter("project_id"));
+    if (acc.IsNullToEmtyString(request.getParameter("project_periods_id")).isEmpty()) {
+        tag = "เพิ่ม";
+    } else {
+        tag = "แก้ไข";
+    }
+%>
+<div class="main-content-inner">
+    <div class="main-content-inner">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('breadcrumbs', 'fixed')
+                } catch (e) {
+                }
+            </script>
+            <ul class="breadcrumb">
+                <li><i class="ace-icon fa fa-home home-icon"></i><a href="index.jsp">หน้าหลัก</a></li>
+                <li><a href="index.jsp?service=ActiveProjectList"> ข้อมูลโครงการที่ได้รับอนุมัติ </a></li>
+                <li> <a href="index.jsp?service=ProjectPeriodsList&project_id=<%=project_id%>"> สัญญาและงวดงาน </a></li>
+                <li> <%=tag%>แผนสัญญาและงวดงาน </li>
+            </ul>
+            <label style="float:right;"><% out.print(acc.IsNullToEmtyString(session.getAttribute("E-Budget-OFFICENAME")));%></label>
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <%
+                    String query = "SELECT * FROM e_budget.project WHERE project_id='" + project_id + "'";
+                    DB2Manager dbms = new DB2Manager();
+                    ResultSet rs = dbms.GetDataAsResultSet(query);
+                    String project_name = "";
+                    if (rs.next()) {
+                        project_name = rs.getString("project_name");
+                    }
+                %>
+                <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> <%=tag%>แผนสัญญาและงวดงาน >> <%=project_name%>  </small></h1>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div>
+                        <div id="user-profile-1" class="user-profile row">
+                            <div class="col-xs-12 col-sm-3 center">
+                                <div>
+                                    <span class="profile-picture">
+                                        <img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="assets/images/Money256.png" style="width:256px;height:256px;"/></a>
+                                    </span>
+                                    <div class="space-4"></div>
+                                    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                        <div class="inline position-relative">
+                                            <b href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                                <span class="white"><%=tag%>แผนสัญญาและงวดงาน</span>
+                                            </b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-6"></div>
+                                <div class="hr hr16 dotted"></div>
+                            </div>
+                            <div class="col-xs-12 col-sm-9">
+                                <div class="space-12"></div>
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> งวดที่ <b class="red">*</b></div>
+                                        <div class="profile-info-value col-sm-12">
+                                            <span>
+                                                <span>
+                                                    <select class="chosen-select form-control" id="office_top_tf" onchange="GetOffice(this.value)">
+                                                        <option value="1"> งวดที่ 1 </option>
+                                                        <option value="1"> งวดที่ 2 </option>
+                                                        <option value="1"> งวดที่ 3 </option>
+                                                        <option value="1"> งวดที่ 4 </option>
+                                                        <option value="1"> งวดที่ 5 </option>
+                                                        <option value="1"> งวดที่ 6 </option>
+                                                        <option value="1"> งวดที่ 7 </option>
+                                                        <option value="1"> งวดที่ 8 </option>
+                                                        <option value="1"> งวดที่ 9 </option>
+                                                        <option value="1"> งวดที่ 10 </option>
+                                                        <option value="1"> งวดที่ 11 </option>
+                                                        <option value="1"> งวดที่ 12 </option>
+                                                        <option value="1"> งวดที่ 13 </option>
+                                                        <option value="1"> งวดที่ 14 </option>
+                                                        <option value="1"> งวดที่ 15 </option>
+                                                        <option value="1"> งวดที่ 16 </option>
+                                                        <option value="1"> งวดที่ 17 </option>
+                                                        <option value="1"> งวดที่ 18 </option>
+                                                        <option value="1"> งวดที่ 19 </option>
+                                                        <option value="1"> งวดที่ 20 </option>
+                                                    </select>                                              
+                                                </span>                                               
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="profile-user-info profile-user-info-striped" style="border-top: none;">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> จำนวนเงิน (บาท) <b class="red">*</b></div>
+                                        <div class="profile-info-value col-sm-12">
+                                            <span>
+                                                <input class="form-control active" type="text" id="budget_total_tf" value="0.00">                                              
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="profile-user-info profile-user-info-striped" style="border-top: none;">
+                                    <div class="profile-info-row">
+                                        <div class="profile-info-name" style="width:200px;"> วันที่ส่งมอบ (แผน) <b class="red">*</b></div>
+                                        <div class="profile-info-value col-sm-12">
+                                            <span>
+                                                <input class="form-control active" type="text" id="budget_total_tf" value="0.00">                                              
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="space-10"></div>
+                            <div class="col-xs-9 col-sm-9" id="infomation3">
+                                <div class="space-10"></div>
+                                <div class="center">
+                                    <button class="btn btn-success btn-white" onclick="Tranfered()"><i class="ace-icon fa fa-floppy-o"></i> บันทึก </button>
+                                    <button class="btn btn-danger btn-white" onclick="Goto('MofStrategic')"><i class="ace-icon fa fa-times"></i> ยกเลิก </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-10"></div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+</div>
+</div>
+<script>
+    function GetOffice(officeid) {
+        $.ajax({
+            type: "POST",
+            url: "GetOfficeServlet",
+            data: {officeid: officeid},
+            cache: false,
+            success: function (data) {
+                $('#officeid_tf').children('option').remove();
+                var office = $.parseJSON(data);
+                $('#officeid_tf').append('<option value=""> </option>');
+                for (i = 0; i < office.length; i++) {
+                    $('#officeid_tf').append('<option value="' + office[i]['officeid'] + '">' + office[i]['officename'] + '</option>');
+                }
+            },
+            error: function (err) {
+
+            }
+        });
+    }
+    function Tranfered() {
+        var to_officeid = $('#officeid_tf').val();
+        if (to_officeid == "") {
+            $.confirm({
+                title: '', content: '<b>กรุณาบันทึกข้อมูลให้ครบถ้วน</b>', animation: 'news', closeAnimation: 'news',
+                buttons: {somethingElse: {text: 'ตกลง', btnClass: 'btn-primary', keys: ['enter', 'shift'], action: function () {}}}
+            });
+            return false;
+        }
+        var budget_category_id = "<%=request.getParameter("budget_category_id")%>";
+        var from_officeid = "<%=request.getSession().getAttribute("E-Budget-OFFICEID")%>";
+        var budget_total = $('#budget_total_tf').val();
+        var tranfer_budget = {
+            to_officeid: to_officeid,
+            budget_category_id: budget_category_id,
+            from_officeid: from_officeid,
+            budget_total: budget_total,
+            METHOD: "INSERT"
+        };
+        $.ajax({
+            type: "POST",
+            url: "TranferBudgetServlet",
+            data: {tranfer_budget: tranfer_budget},
+            cache: false,
+            success: function (data) {
+                if (data == "TRUE") {
+                    $.confirm({
+                        title: '', content: '<b>บันทึกข้อมูลเรียบร้อย</b>', animation: 'news', closeAnimation: 'news',
+                        buttons: {somethingElse: {text: 'ตกลง', btnClass: 'btn-primary', keys: ['enter', 'shift'], action: function () {
+                                    Goto('BudgetAllocateList&budget_category_id=' + budget_category_id);
+                                }}}
+                    });
+                }
+            },
+            error: function (err) {
+                waitingDialog.hide();
+            }
+        });
+    }
+</script>

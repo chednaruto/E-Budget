@@ -1,0 +1,17 @@
+<div class="profile-user-info profile-user-info-striped">
+    <div class="profile-info-row">
+        <div class="profile-info-name" style="width:200px;"> ????????????????? (Outcome) </div>
+        <div class="profile-info-value">
+            <span id="fullname_tf">
+                <div class="input-group col-sm-12">
+                    <input class="form-control active" type="text" id="project_outcome_tf[]">
+                    <span class="input-group-btn">
+                        <button class="btn btn-sm btn-danger" type="button" onclick="DeleteProjectOutCome(this)">
+                            <i class="ace-icon fa fa-trash bigger-110"></i> ?? 
+                        </button>
+                    </span>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>

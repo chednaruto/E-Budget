@@ -1,0 +1,90 @@
+package rd.ebudget.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import rd.ebudget.object.lookup.Gov.GovernmentPolicy;
+
+public class GovPolicyServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            String method = request.getParameter("government_policy[method]");
+            String[] government_policy_id = request.getParameterValues("government_policy[government_policy_id]");
+            String[] government_policy_name = request.getParameterValues("government_policy[government_policy_name]");
+            String[] government_policy_status = request.getParameterValues("government_policy[government_policy_status]");
+            GovernmentPolicy gov;
+            for (int i = 0; i < government_policy_name.length; i++) {
+                gov = new GovernmentPolicy();
+                gov.setGovernment_policy_id(government_policy_id[i]);
+                gov.setGovernment_policy_name(government_policy_name[i]);
+                gov.setGovernment_policy_status(government_policy_status[i]);
+                boolean status = false;
+                if (method.equals("INSERT")) {
+                    if (gov.getGovernment_policy_id().isEmpty()) {
+                        status = gov.InsertGovernmentPolicy(gov);
+                    } else {
+                        status = gov.UpdateGovernmentPolicy(gov);
+                    }
+                } else if (method.equals("DELETE")) {
+                    status = gov.DeleteGovernmentPolicy(gov);
+                }
+                if (status==true) {
+                    out.write("TRUE");
+                } else {
+                    out.write("FALSE");
+                }
+                out.flush();
+                out.close();
+            }
+        } catch (Exception ex) {
+
+        }
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

@@ -1,0 +1,51 @@
+package rd.ebudget.tools;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import rd.ebudget.object.MysqlProperties;
+import rd.ebudget.prop.PropertiesManagement;
+
+public class MysqlManager {
+
+    private Connection conn;
+    Statement st = null;
+    ResultSet rs = null;
+    private void SetConnection() {
+        PropertiesManagement pm = new PropertiesManagement();
+        MysqlProperties mp = pm.GetMysqlProperties();
+        try {
+            Class.forName(mp.getDriver());
+            conn = DriverManager.getConnection(mp.getUrl() + ":" + mp.getPort() + "/" + mp.getDbname() + "?user=" + mp.getUsername() + "&password=" + mp.getPassword());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet GetDataAsResultSet(String query) {
+        try {
+            SetConnection();
+            st = conn.createStatement();
+            rs = st.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public void closeConnection(){
+        try{
+            if(rs != null)
+                rs.close();
+            if(st != null)
+                st.close();
+            if(conn!= null)
+                conn.close();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}

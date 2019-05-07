@@ -1,0 +1,104 @@
+package rd.ebudget.object.lookup.budget;
+
+import java.sql.ResultSet;
+import rd.ebudget.tools.MysqlManager;
+
+public class DisbursementCategory {
+
+    private String disbursement_category_id;
+    private String disbursement_category_name;
+    private String disbursement_category_status;
+    private String disbursement_type_id;
+
+    public boolean InsertDisbursementCategory(DisbursementCategory dc) {
+        boolean ret = false;
+        try {
+            String query = "INSERT INTO disbursement_category(disbursement_category_name,disbursement_category_status,disbursement_type_id) "
+                    + "VALUES('" + dc.getDisbursement_category_name() + "','" + dc.getDisbursement_category_status() + "','" + dc.getDisbursement_type_id() + "')";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean UpdateDisbursementCategory(DisbursementCategory dc) {
+        boolean ret = false;
+        try {
+            String query = "REPLACE INTO disbursement_category(disbursement_category_id,disbursement_category_name,disbursement_category_status,disbursement_type_id) "
+                    + "VALUES('" + dc.getDisbursement_category_id() + "','" + dc.getDisbursement_category_name() + "','" + dc.getDisbursement_category_status() + "','" + dc.getDisbursement_type_id() + "')";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public boolean DeleteDisbursementCategory(DisbursementCategory dc) {
+        boolean ret = false;
+        try {
+            String query = "DELETE FROM disbursement_category WHERE disbursement_category_id='" + dc.getDisbursement_category_id() + "'";
+            MysqlManager mm = new MysqlManager();
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public boolean  CheckingUsage(DisbursementCategory dc){
+        boolean ret = true;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "SELECT COUNT(*) cc FROM  disbursement WHERE disbursement_category_id='" + dc.getDisbursement_category_id()+ "'";
+            ResultSet rsl = mm.GetDataAsResultSet(query);
+            while (rsl.next()) {
+                if (rsl.getInt("cc") > 0) {
+                    ret = false;
+                } else {
+                    ret = true;
+                }
+            }
+            rsl.close();
+            mm.closeConnection();
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+        
+    public String getDisbursement_category_id() {
+        return disbursement_category_id;
+    }
+
+    public void setDisbursement_category_id(String disbursement_category_id) {
+        this.disbursement_category_id = disbursement_category_id;
+    }
+
+    public String getDisbursement_category_name() {
+        return disbursement_category_name;
+    }
+
+    public void setDisbursement_category_name(String disbursement_category_name) {
+        this.disbursement_category_name = disbursement_category_name;
+    }
+
+    public String getDisbursement_category_status() {
+        return disbursement_category_status;
+    }
+
+    public void setDisbursement_category_status(String disbursement_category_status) {
+        this.disbursement_category_status = disbursement_category_status;
+    }
+
+    public String getDisbursement_type_id() {
+        return disbursement_type_id;
+    }
+
+    public void setDisbursement_type_id(String disbursement_type_id) {
+        this.disbursement_type_id = disbursement_type_id;
+    }
+
+}

@@ -1,0 +1,59 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rd.ebudget.object.lookup.Gov;
+
+/**
+ *
+ * @author Mr.Tue
+ */
+public class MofStrategic {
+    private String mof_strategic_id;
+    private String mof_strategic_name;
+    private String mof_strategic_status;
+
+    /**
+     * @return the mof_strategic_id
+     */
+    public String getMof_strategic_id() {
+        return mof_strategic_id;
+    }
+
+    /**
+     * @param mof_strategic_id the mof_strategic_id to set
+     */
+    public void setMof_strategic_id(String mof_strategic_id) {
+        this.mof_strategic_id = mof_strategic_id;
+    }
+
+    /**
+     * @return the mof_strategic_name
+     */
+    public String getMof_strategic_name() {
+        return mof_strategic_name;
+    }
+
+    /**
+     * @param mof_strategic_name the mof_strategic_name to set
+     */
+    public void setMof_strategic_name(String mof_strategic_name) {
+        this.mof_strategic_name = mof_strategic_name;
+    }
+
+    /**
+     * @return the mof_strategic_status
+     */
+    public String getMof_strategic_status() {
+        return mof_strategic_status;
+    }
+
+    /**
+     * @param mof_strategic_status the mof_strategic_status to set
+     */
+    public void setMof_strategic_status(String mof_strategic_status) {
+        this.mof_strategic_status = mof_strategic_status;
+    }
+
+}

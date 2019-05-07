@@ -1,0 +1,168 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('sidebar')
+        } catch (e) {
+        }
+    </script>
+    
+    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+            <button class="btn btn-white btn-success"><i class="ace-icon fa fa-signal"></i></button>
+            <button class="btn btn-white btn-info"><i class="ace-icon fa fa-pencil"></i></button>
+            <button class="btn btn-white btn-warning"><i class="ace-icon fa fa-users"></i></button>
+            <button class="btn btn-white btn-danger"><i class="ace-icon fa fa-cogs"></i></button>
+        </div>
+        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+            <span class="btn btn-info"></span>
+            <span class="btn btn-warning"></span>
+            <span class="btn btn-danger"></span>
+        </div>
+    </div>
+    <ul class="nav nav-list">
+        <% if (session.getAttribute("E-Budget") != null && !session.getAttribute("E-Budget").equals("")) {%>
+        <li <% if (request.getParameter("service") == null || request.getParameter("service").equals("dashboard")) {
+                out.print("class='active'");
+            }%>>
+            <a href="index.jsp?service=dashboard">
+                <i class="menu-icon fa fa-tachometer"></i>
+                <span class="menu-text"> Dashboard </span>
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <!---------------------------------------------------  Left Menu E-Tracking --------------------------------------------------->
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text"> จัดการโครงการ </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li <% if (request.getParameter("service") == null || request.getParameter("service").equals("ProjectMenager")) {out.print("class='active'");}%>>
+                    <a href="index.jsp?service=ProjectManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลโครงการ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="menu-icon fa fa-caret-right"></i> อนุมัติโครงการ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectPurchaseManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลจัดซื้อจัดจ้าง
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectEngageManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลสัญญาและงวดงาน
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectPaymentManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลเบิกจ่ายงบประมาณ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+        <!---------------------------------------------------  Left Menu E-Tracking --------------------------------------------------->
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="menu-icon fa fa-list"></i>
+                <span class="menu-text"> จัดการข้อมูลพื้นฐาน </span>
+                <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+                <li>
+                    <a href="index.php?service=projectManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลโครงการ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="menu-icon fa fa-caret-right"></i> อนุมัติโครงการ
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectPurchaseManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลจัดซื้อจัดจ้าง
+
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectEngageManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลสัญญาและงวดงาน
+
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
+                    <a href="index.php?service=ProjectPaymentManager">
+                        <i class="menu-icon fa fa-caret-right"></i> ข้อมูลเบิกจ่ายงบประมาณ
+
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+            </ul>
+        </li>
+        <%}%>
+        
+        
+        <li <% if (request.getParameter("service") != null && request.getParameter("service").equals("Document")) {
+                out.print("class='active'");
+            }%>>
+            <a href="index.jsp?service=Document"><i class="menu-icon fa fa-book"></i><span class="menu-text"> คู่มือการใช้งาน </span></a>
+            <b class="arrow"></b>
+        </li>
+        <li <% if (request.getParameter("service") != null && request.getParameter("service").equals("News")) {
+                out.print("class='active'");
+            }%>>
+            <a href="index.jsp?service=News"><i class="menu-icon fa fa-envelope-o"></i><span class="menu-text"> ข่าวประชาสัมพันธ์ </span></a>
+            <b class="arrow"></b>
+        </li>
+        <li <% if (request.getParameter("service") != null && request.getParameter("service").equals("About")) {
+                out.print("class='active'");
+            }%>>
+            <a href="index.jsp?service=About"><i class="menu-icon fa fa-exclamation-circle"></i><span class="menu-text"> ติดต่อ </span></a>
+            <b class="arrow"></b>
+        </li>
+        <li class="">
+            <%
+                if (session.getAttribute("E-Budget") == null || session.getAttribute("E-Budget") == "") {
+            %>
+            <a href="#" onclick="Login()">
+                <i class="menu-icon fa fa-power-off green"></i>
+                <span class="menu-text"> เข้าสู่ระบบ </span>
+            </a>
+            <b class="arrow"></b>
+
+            <%
+            } else {
+            %>
+            <a href="#" onclick="Logout()">
+                <i class="menu-icon fa fa-power-off red"></i>
+                <span class="menu-text"> ออกจากระบบ </span>
+            </a>
+            <b class="arrow"></b>
+            <%
+                }
+            %>
+        </li>
+    </ul><!-- /.nav-list -->
+
+    <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+        <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+    </div>
+</div>

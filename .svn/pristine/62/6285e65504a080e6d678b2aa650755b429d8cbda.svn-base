@@ -1,0 +1,446 @@
+<%@page import="rd.ebudget.tools.DB2Manager"%>
+<%@page import="rd.ebudget.object.lookup.Gov.RdGoal"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="rd.ebudget.tools.MysqlManager"%>
+<%@page import="rd.ebudget.tools.Accessories"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% Accessories acc = new Accessories();%>
+<div class="main-content-inner">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">หน้าหลัก</a></li>
+            <li> จัดการผู้ใช้งาน </li>
+        </ul>
+        <label style="float:right;"><% out.print(acc.IsNullToEmtyString(session.getAttribute("E-Budget-OFFICENAME")));%></label>
+    </div>
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-header">
+                    <h1><small style="color:#4D96CB!important;"><i class="ace-icon fa fa-angle-double-right"></i> ข้อมูลผู้ใช้งาน </small></h1>
+                </div>
+                <div class="alert alert-block alert-success">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="ace-icon fa fa-times"></i>
+                    </button>
+
+                    <i class="ace-icon fa fa-check green"></i>
+
+                    หมายเหตุ : <BR> 
+                    <b style="color: red;margin-left: 15px;"> SA </b> : <b class="blue">สิทธิ์ Super Admin สงวนสำหรับผู้ดูแลระบบ ทท.</b><BR> 
+                    <b style="color: red;margin-left: 15px;"> A </b> : <b class="blue">สิทธิ์ผู้ดูแลระบบ สงวนสำหรับผู้ดูแลระบบ บร.</b><BR> 
+                    <b style="color: red;margin-left: 15px;"> B </b> : <b class="blue">สิทธิ์สำหรับผู้บริหาร </b><BR> 
+                    <b style="color: red;margin-left: 15px;"> F </b> : <b class="blue">สิทธิ์สำหรับเจ้าหน้าที่การเงิน </b><BR> 
+                    <b style="color: red;margin-left: 15px;"> P </b> : <b class="blue">สิทธิ์สำหรับเจ้าหน้าที่พัสดุ. </b><BR> 
+                    <b style="color: red;margin-left: 15px;"> PM </b> : <b class="blue">สิทธิ์ผู้รับผิดชอบโครงการ. </b>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 center">
+                        <button class="btn btn-success btn-white" style="float:right;" onclick="Goto('UserAdding')"><i class="ace-icon fa fa-plus"></i> เพิ่มผู้ใช้งาน </button> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- #section:elements.tab -->
+
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs" id="myTab">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#user-all">
+                                        <i class="green ace-icon fa fa-users bigger-120"></i>
+                                        <%
+                                            DB2Manager mm = new DB2Manager();
+                                            String query = "select u.*,up.super_admin,up.admin,up.boss,up.finance,up.parcel,up.project_manager,up.permission_status from e_budget.user u left join e_budget.user_permission up ON u.id = up.id and u.officeid = up.officeid";
+                                            ResultSet rs = mm.GetDataAsResultSet(query);
+                                            int total_active = 0;
+                                            while (rs.next()) {
+                                                total_active++;
+                                            }
+                                            rs.close();
+                                            mm.closeConnection();
+                                        %>
+                                        ผู้ใช้งานทั้งหมด
+                                        <span class="badge badge-success"><%=total_active%></span>
+                                    </a>
+                                </li>
+
+                                <li >
+                                    <a data-toggle="tab" href="#user-not-active">
+                                        <i class="red ace-icon fa fa-users bigger-120"></i>
+                                        <%
+                                            mm = new DB2Manager();
+                                            query = "select u.*,up.super_admin,up.admin,up.boss,up.finance,up.parcel,up.project_manager,up.permission_status from e_budget.user u left join e_budget.user_permission up ON u.id = up.id and u.officeid = up.officeid WHERE up.permission_status <> 'Y'";
+                                            rs = mm.GetDataAsResultSet(query);
+                                            int total_not_active = 0;
+                                            while (rs.next()) {
+                                                total_not_active++;
+                                            }
+                                            rs.close();
+                                            mm.closeConnection();
+                                        %>
+                                        ผู้ใช้งานที่ยังไม่ได้รับอนุมัติสิทธิ์
+                                        <span class="badge badge-danger"><%=total_not_active%></span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div id="user-all" class="tab-pane fade in active">
+                                    <div>
+                                        <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="center" rowspan="2"> หน่วยงาน </th>
+                                                    <th class="center" rowspan="2"> ชื่อสกุล </th>
+                                                    <th class="center" rowspan="2"> ตำแหน่ง </th>
+                                                    <th class="center" rowspan="2"> E-Mail </th>
+                                                    <th class="center" colspan="6"> สิทธิ์ </th>
+                                                    <th class="center" rowspan="2"> สถานะ </th>
+                                                    <th class="center" rowspan="2"> เมนู </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="center" > SA </th>
+                                                    <th class="center" > A </th>
+                                                    <th class="center" > B </th>
+                                                    <th class="center" > F </th>
+                                                    <th class="center" > P </th>
+                                                    <th class="center" > PM </th>
+                                                </tr>
+                                            </thead>  
+                                            <tbody>
+                                                <%
+                                                    mm = new DB2Manager();
+                                                    query = "select u.*,up.super_admin,up.admin,up.boss,up.finance,up.parcel,up.project_manager,up.permission_status from e_budget.user u left join e_budget.user_permission up ON u.id = up.id and u.officeid = up.officeid";
+                                                    rs = mm.GetDataAsResultSet(query);
+                                                    while (rs.next()) {
+                                                %>
+                                                <tr>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("officename"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("title")) + acc.IsNullToEmtyString(rs.getString("fname")) + " " + acc.IsNullToEmtyString(rs.getString("lname"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("position_m"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("email"))%></td>
+
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("super_admin")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("admin")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("boss")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("finance")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("parcel")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("project_manager")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("permission_status")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        }%>'></i></td>
+                                                    <td class="center">
+                                                        <div class="btn-group">
+                                                            <button data-toggle="dropdown" class="btn btn-primary btn-white dropdown-toggle btn-sm" aria-expanded="true">
+                                                                <i class="ace-icon fa fa-list"></i> เมนู
+                                                                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li> 
+                                                                    <a href="#" onclick="Goto('UserAdding&id=<%=acc.IsNullToEmtyString(rs.getString("id"))%>&officeid=<%=acc.IsNullToEmtyString(rs.getString("officeid"))%>')"> 
+                                                                        <i class="fa fa-pencil-square-o blue"></i> แก้ไขรายการ </a> 
+                                                                </li>
+                                                                <li class="divider"></li>
+                                                                <li> 
+                                                                    <a href="#" onclick="ActiveDisableUser('<%=acc.IsNullToEmtyString(rs.getString("id"))%>', '<%=acc.IsNullToEmtyString(rs.getString("officeid"))%>')"> 
+                                                                        <%if (acc.IsNullToEmtyString(rs.getString("permission_status")).equals("Y")) {
+                                                                                out.print("<i class='fa fa-square-o red'></i> ระงับสิทธิ์ ");
+                                                                            } else {
+                                                                                out.print("<i class='fa fa-check-square-o green'></i> อนุมัติสิทธิ์ ");
+                                                                            }%> </a> 
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>   
+                                                <%
+                                                    }
+                                                    rs.close();
+                                                    mm.closeConnection();
+                                                %>                 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="user-not-active" class="tab-pane fade">
+                                    <div>
+                                        <table id="dynamic-table2" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="center" rowspan="2"> หน่วยงาน </th>
+                                                    <th class="center" rowspan="2"> ชื่อสกุล </th>
+                                                    <th class="center" rowspan="2"> ตำแหน่ง </th>
+                                                    <th class="center" rowspan="2"> E-Mail </th>
+                                                    <th class="center" colspan="6"> สิทธิ์ </th>
+                                                    <th class="center" rowspan="2"> สถานะ </th>
+                                                    <th class="center" rowspan="2"> เมนู </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="center" > SA </th>
+                                                    <th class="center" > A </th>
+                                                    <th class="center" > B </th>
+                                                    <th class="center" > F </th>
+                                                    <th class="center" > P </th>
+                                                    <th class="center" > PM </th>
+                                                </tr>
+                                            </thead>  
+                                            <tbody>
+                                                <%
+                                                    mm = new DB2Manager();
+                                                    query = "select u.*,up.super_admin,up.admin,up.boss,up.finance,up.parcel,up.project_manager,up.permission_status from e_budget.user u left join e_budget.user_permission up ON u.id = up.id and u.officeid = up.officeid WHERE up.permission_status <> 'Y'";
+                                                    rs = mm.GetDataAsResultSet(query);
+                                                    while (rs.next()) {
+                                                %>
+                                                <tr>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("officename"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("title")) + acc.IsNullToEmtyString(rs.getString("fname")) + " " + acc.IsNullToEmtyString(rs.getString("lname"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("position_m"))%></td>
+                                                    <td class="center"><%=acc.IsNullToEmtyString(rs.getString("email"))%></td>
+
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("super_admin")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("admin")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("boss")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("finance")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("parcel")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("project_manager")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        } %>'></i></td>
+                                                    <td class="center"><i class='ace-icon fa <% if (acc.IsNullToEmtyString(rs.getString("permission_status")).equals("Y")) {
+                                                            out.print("fa-check green");
+                                                        } else {
+                                                            out.print("fa-times red");
+                                                        }%>'></i></td>
+                                                    <td class="center">
+                                                        <div class="btn-group">
+                                                            <button data-toggle="dropdown" class="btn btn-primary btn-white dropdown-toggle btn-sm" aria-expanded="true">
+                                                                <i class="ace-icon fa fa-list"></i> เมนู
+                                                                <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li> 
+                                                                    <a href="#" onclick="Goto('UserAdding&id=<%=acc.IsNullToEmtyString(rs.getString("id"))%>&officeid=<%=acc.IsNullToEmtyString(rs.getString("officeid"))%>')"> 
+                                                                        <i class="fa fa-pencil-square-o blue"></i> แก้ไขรายการ </a> 
+                                                                </li>
+                                                                <li>
+                                                                <li class="divider"></li>
+                                                                <li> 
+                                                                    <a href="#" onclick="ActiveDisableUser('<%=acc.IsNullToEmtyString(rs.getString("id"))%>', '<%=acc.IsNullToEmtyString(rs.getString("officeid"))%>')"> 
+                                                                        <%if (acc.IsNullToEmtyString(rs.getString("permission_status")).equals("Y")) {
+                                                                                out.print("<i class='fa fa-square-o red'></i> ระงับสิทธิ์ ");
+                                                                            } else {
+                                                                                out.print("<i class='fa fa-check-square-o green'></i> อนุมัติสิทธิ์ ");
+                                                                            }%> </a> 
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>   
+                                                <%
+                                                    }
+                                                    rs.close();
+                                                    mm.closeConnection();
+                                                %>                 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
+    <script src="assets/js/dataTables.buttons.min.js"></script>
+    <script src="assets/js/buttons.flash.min.js"></script>
+    <script src="assets/js/buttons.html5.min.js"></script>
+    <script src="assets/js/buttons.print.min.js"></script>
+    <script src="assets/js/buttons.colVis.min.js"></script>
+    <script src="assets/js/dataTables.select.min.js"></script>
+    <script>
+                                                                        $(document).ready(function () {
+
+                                                                            //dynamic-table
+                                                                            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                                                                                $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+                                                                            });
+                                                                            var oTable1 = $('#dynamic-table').dataTable({
+                                                                                "language": {
+                                                                                    "search": "<b>ค้นหา:</b>",
+                                                                                    "lengthMenu": "แสดง _MENU_ รายการ ต่อหน้า",
+                                                                                    "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                                                                                    "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                                                                                    "zeroRecords": "ไม่มีข้อมูล",
+                                                                                    "oPaginate": {
+                                                                                        "sFirst": "หน้าแรก", // This is the link to the first page
+                                                                                        "sPrevious": "ก่อนหน้า", // This is the link to the previous page
+                                                                                        "sNext": "ถัดไป", // This is the link to the next page
+                                                                                        "sLast": "หน้าสุดท้าย" // This is the link to the last page
+                                                                                    }
+                                                                                }, "pageLength": 10
+                                                                            });
+                                                                            var oTable2 = $('#dynamic-table2').dataTable({
+                                                                                "language": {
+                                                                                    "search": "<b>ค้นหา:</b>",
+                                                                                    "lengthMenu": "แสดง _MENU_ รายการ ต่อหน้า",
+                                                                                    "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                                                                                    "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                                                                                    "zeroRecords": "ไม่มีข้อมูล",
+                                                                                    "oPaginate": {
+                                                                                        "sFirst": "หน้าแรก", // This is the link to the first page
+                                                                                        "sPrevious": "ก่อนหน้า", // This is the link to the previous page
+                                                                                        "sNext": "ถัดไป", // This is the link to the next page
+                                                                                        "sLast": "หน้าสุดท้าย"
+                                                                                    }
+                                                                                }, "pageLength": 10
+                                                                            });
+
+                                                                            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                                                                                $($.fn.dataTable.tables(true)).css('width', '100%');
+                                                                                $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+                                                                            });
+                                                                        });
+
+
+
+                                                                        function DEL(disbursement_id) {
+                                                                            $.confirm({
+                                                                                title: '',
+                                                                                content: '<b>คุณต้องการลบข้อมูลใช่หรือไม่</b>',
+                                                                                animation: 'news',
+                                                                                closeAnimation: 'news',
+                                                                                buttons: {
+                                                                                    somethingElse: {
+                                                                                        text: 'ตกลง',
+                                                                                        btnClass: 'btn-success',
+                                                                                        keys: ['enter', 'shift'],
+                                                                                        action: function () {
+                                                                                            var disbursement = {
+                                                                                                disbursement_id: disbursement_id,
+                                                                                                METHOD: "DELETE"
+                                                                                            };
+                                                                                            $.ajax({
+                                                                                                type: "POST",
+                                                                                                url: "DisbursementServlet",
+                                                                                                data: {disbursement: disbursement},
+                                                                                                cache: false,
+                                                                                                success: function (data) {
+                                                                                                    waitingDialog.hide();
+                                                                                                    if (data == "TRUE") {
+                                                                                                        Goto('Disbursement');
+                                                                                                    }
+                                                                                                },
+                                                                                                error: function (err) {}
+                                                                                            });
+                                                                                        }
+                                                                                    },
+                                                                                    cancleElse: {
+                                                                                        text: 'ยกเลิก',
+                                                                                        btnClass: 'btn-danger',
+                                                                                        keys: ['enter', 'shift'],
+                                                                                        action: function () {
+
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                        }
+
+                                                                        function ActiveDisableUser(id, officeid) {
+                                                                            $.confirm({
+                                                                                title: '',
+                                                                                content: '<b>กรุณายืนยันอีกครั้ง</b>',
+                                                                                animation: 'news',
+                                                                                closeAnimation: 'news',
+                                                                                buttons: {
+                                                                                    somethingElse: {
+                                                                                        text: 'ตกลง',
+                                                                                        btnClass: 'btn-success',
+                                                                                        keys: ['enter', 'shift'],
+                                                                                        action: function () {
+                                                                                            $.ajax({
+                                                                                                type: "POST",
+                                                                                                url: "ActiveDisableUserServlet",
+                                                                                                data: {id: id, officeid: officeid},
+                                                                                                cache: false,
+                                                                                                success: function (data) {
+                                                                                                    if (data == "TRUE") {
+                                                                                                        Goto('UserManagement');
+                                                                                                    }
+                                                                                                },
+                                                                                                error: function (err) {}
+                                                                                            });
+                                                                                        }
+                                                                                    },
+                                                                                    cancleElse: {
+                                                                                        text: 'ยกเลิก',
+                                                                                        btnClass: 'btn-danger',
+                                                                                        keys: ['enter', 'shift'],
+                                                                                        action: function () {
+
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                        }
+    </script>
+</div>

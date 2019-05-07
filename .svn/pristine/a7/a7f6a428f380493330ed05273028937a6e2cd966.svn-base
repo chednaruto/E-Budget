@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECar/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECar/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECar/">
+      <s:element name="AuthenUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CheckUser" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckPass" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DataUser" nillable="true" type="tns:DataUser" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DataUser">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Authen" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TITLE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FNAME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LNAME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EMAIL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="POSNAME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EMPSTATUS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BIRTH" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CLASS_data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SKILLID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EMPTYPE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OFFICEID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OFFICENAME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PIN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="POSITION_M" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CLASS_NEW" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LEVEL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="POSACT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GROUPNAME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ISADMIN" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DataUser" nillable="true" type="tns:DataUser" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthenUserSoapIn">
+    <wsdl:part name="parameters" element="tns:AuthenUser" />
+  </wsdl:message>
+  <wsdl:message name="AuthenUserSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthenUserHttpGetIn">
+    <wsdl:part name="CheckUser" type="s:string" />
+    <wsdl:part name="CheckPass" type="s:string" />
+    <wsdl:part name="UID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenUserHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataUser" />
+  </wsdl:message>
+  <wsdl:message name="AuthenUserHttpPostIn">
+    <wsdl:part name="CheckUser" type="s:string" />
+    <wsdl:part name="CheckPass" type="s:string" />
+    <wsdl:part name="UID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthenUserHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataUser" />
+  </wsdl:message>
+  <wsdl:portType name="AuthenUserEofficeECarSoap">
+    <wsdl:operation name="AuthenUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Check User in Eoffice by using UID</wsdl:documentation>
+      <wsdl:input message="tns:AuthenUserSoapIn" />
+      <wsdl:output message="tns:AuthenUserSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="AuthenUserEofficeECarHttpGet">
+    <wsdl:operation name="AuthenUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Check User in Eoffice by using UID</wsdl:documentation>
+      <wsdl:input message="tns:AuthenUserHttpGetIn" />
+      <wsdl:output message="tns:AuthenUserHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="AuthenUserEofficeECarHttpPost">
+    <wsdl:operation name="AuthenUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Check User in Eoffice by using UID</wsdl:documentation>
+      <wsdl:input message="tns:AuthenUserHttpPostIn" />
+      <wsdl:output message="tns:AuthenUserHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuthenUserEofficeECarSoap" type="tns:AuthenUserEofficeECarSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AuthenUser">
+      <soap:operation soapAction="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECar/AuthenUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AuthenUserEofficeECarSoap12" type="tns:AuthenUserEofficeECarSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AuthenUser">
+      <soap12:operation soapAction="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECar/AuthenUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AuthenUserEofficeECarHttpGet" type="tns:AuthenUserEofficeECarHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="AuthenUser">
+      <http:operation location="/AuthenUser" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AuthenUserEofficeECarHttpPost" type="tns:AuthenUserEofficeECarHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="AuthenUser">
+      <http:operation location="/AuthenUser" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuthenUserEofficeECar">
+    <wsdl:port name="AuthenUserEofficeECarSoap" binding="tns:AuthenUserEofficeECarSoap">
+      <soap:address location="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECAR.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AuthenUserEofficeECarSoap12" binding="tns:AuthenUserEofficeECarSoap12">
+      <soap12:address location="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECAR.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AuthenUserEofficeECarHttpGet" binding="tns:AuthenUserEofficeECarHttpGet">
+      <http:address location="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECAR.asmx" />
+    </wsdl:port>
+    <wsdl:port name="AuthenUserEofficeECarHttpPost" binding="tns:AuthenUserEofficeECarHttpPost">
+      <http:address location="http://wservice.rd.go.th/ServiceEoffice/AuthenUserEofficeECAR.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

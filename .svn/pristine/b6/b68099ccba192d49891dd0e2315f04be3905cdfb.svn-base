@@ -1,0 +1,73 @@
+package rd.ebudget.object.lookup.Gov;
+
+import rd.ebudget.tools.MysqlManager;
+
+public class GovernmentPolicy {
+
+    private String government_policy_id;
+    private String government_policy_name;
+    private String government_policy_status;
+
+    public boolean InsertGovernmentPolicy(GovernmentPolicy gp) {
+        boolean ret = false;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "INSERT INTO government_policy(government_policy_name,government_policy_status) "
+                    + "VALUES('"+gp.getGovernment_policy_name()+"','"+gp.getGovernment_policy_status()+"')";
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+    
+    public boolean UpdateGovernmentPolicy(GovernmentPolicy gp) {
+        boolean ret = false;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "REPLACE INTO government_policy(government_policy_id,government_policy_name,government_policy_status) "
+                    + "VALUES('"+gp.getGovernment_policy_id()+"','"+gp.getGovernment_policy_name()+"','"+gp.getGovernment_policy_status()+"')";
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+    
+    public boolean DeleteGovernmentPolicy(GovernmentPolicy gp) {
+        boolean ret = false;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "DELETE FROM government_policy WHERE government_policy_id='"+gp.getGovernment_policy_id()+"'";
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+
+        }
+        return ret;
+    }
+
+    public String getGovernment_policy_id() {
+        return government_policy_id;
+    }
+
+    public void setGovernment_policy_id(String government_policy_id) {
+        this.government_policy_id = government_policy_id;
+    }
+
+    public String getGovernment_policy_name() {
+        return government_policy_name;
+    }
+
+    public void setGovernment_policy_name(String government_policy_name) {
+        this.government_policy_name = government_policy_name;
+    }
+
+    public String getGovernment_policy_status() {
+        return government_policy_status;
+    }
+
+    public void setGovernment_policy_status(String government_policy_status) {
+        this.government_policy_status = government_policy_status;
+    }
+
+}

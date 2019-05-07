@@ -1,0 +1,76 @@
+package rd.ebudget.object.Budget;
+
+import rd.ebudget.tools.DB2Manager;
+
+public class ProjectOwner {
+
+    private String project_id;
+    private String id;
+    private String fullname;
+    private String position_m;
+    private String email;
+
+    public boolean InsertProjectOwner(ProjectOwner po) {
+        boolean ret = false;
+        try {
+            String query = "INSERT INTO e_budget.project_owner(project_id,id,fullname,position_m,email) VALUES('" + po.getProject_id() + "','" + po.getId() + "','" + po.getFullname() + "','" + po.getPosition_m() + "','" + po.getEmail() + "')";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean DeleteProjectOwner(ProjectOwner po) {
+        boolean ret = false;
+        try {
+            String query = "DELETE FROM e_budget.project_owner where project_id = '" + po.getProject_id() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public String getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPosition_m() {
+        return position_m;
+    }
+
+    public void setPosition_m(String position_m) {
+        this.position_m = position_m;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}

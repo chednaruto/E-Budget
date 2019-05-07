@@ -1,0 +1,85 @@
+package rd.ebudget.object.Budget;
+
+import rd.ebudget.tools.DB2Manager;
+import rd.ebudget.tools.MysqlManager;
+
+public class ReceiveBudget {
+
+    private String receive_budget_id;
+    private String budget_category_id;
+    private String budget_type_id;
+    private double budget_total;
+
+    public boolean InsertReceiveBudget(ReceiveBudget rb) {
+        boolean ret = false;
+        try {
+            DB2Manager mm = new DB2Manager();
+            String query = "INSERT INTO e_budget.receive_budget(budget_category_id,budget_type_id,budget_total) "
+                    + "VALUES(" + rb.getBudget_category_id() + "," + rb.getBudget_type_id() + "," + rb.getBudget_total() + ")";
+            ret = mm.Excute(query);
+            System.out.println(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean UpdateReceiveBudget(ReceiveBudget rb) {
+        boolean ret = false;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "UPDATE  e_budget.receive_budget " 
+                    + "SET budget_category_id="+rb.getBudget_category_id()+",budget_type_id="+rb.getBudget_type_id()+",budget_total="+rb.getBudget_total()+" "
+                    + "WHERE receive_budget_id =" + rb.getReceive_budget_id();
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public boolean DeleteReceiveBudget(ReceiveBudget rb) {
+        boolean ret = false;
+        try {
+            MysqlManager mm = new MysqlManager();
+            String query = "DELETE FROM e_budget.receive_budget WHERE receive_budget_id="+rb.getReceive_budget_id();
+            ret = mm.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+    
+    public String getReceive_budget_id() {
+        return receive_budget_id;
+    }
+
+    public void setReceive_budget_id(String receive_budget_id) {
+        this.receive_budget_id = receive_budget_id;
+    }
+
+    public String getBudget_category_id() {
+        return budget_category_id;
+    }
+
+    public void setBudget_category_id(String budget_category_id) {
+        this.budget_category_id = budget_category_id;
+    }
+
+    public String getBudget_type_id() {
+        return budget_type_id;
+    }
+
+    public void setBudget_type_id(String budget_type_id) {
+        this.budget_type_id = budget_type_id;
+    }
+
+    public double getBudget_total() {
+        return budget_total;
+    }
+
+    public void setBudget_total(double budget_total) {
+        this.budget_total = budget_total;
+    }
+
+}

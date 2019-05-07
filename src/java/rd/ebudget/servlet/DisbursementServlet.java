@@ -1,0 +1,88 @@
+package rd.ebudget.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import rd.ebudget.object.lookup.budget.Disbursemen;
+import rd.ebudget.tools.Accessories;
+
+public class DisbursementServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        boolean ret = false;
+        try (PrintWriter out = response.getWriter()) {
+            Accessories acc = new Accessories();
+            String method = acc.IsNullToEmtyString(request.getParameter("disbursement[METHOD]"));
+            if (method.equals("INSERT")) {
+                Disbursemen ds = new Disbursemen();
+                ds.setDisbursement_id(acc.IsNullToEmtyString(request.getParameter("disbursement[disbursement_id]")));
+                ds.setDisbursement_name(acc.IsNullToEmtyString(request.getParameter("disbursement[disbursement_name]")));
+                ds.setDisbursement_category_id(acc.IsNullToEmtyString(request.getParameter("disbursement[disbursement_category_id]")));
+                ds.setDisbursement_status(acc.IsNullToEmtyString(request.getParameter("disbursement[disbursement_status]")));
+                ds.setGfmis_code(acc.IsNullToEmtyString(request.getParameter("disbursement[gfmis_code]")));
+                ds.setPlan_type_id(acc.IsNullToEmtyString(request.getParameter("disbursement[plan_type_id]")));
+                if (ds.getDisbursement_id().isEmpty()) {
+                    ret = ds.InsertDisbursemen(ds);
+                } else {
+                    ret = ds.UpdateDisbursemen(ds);
+                }
+            } else if (method.equals("DELETE")) {
+                Disbursemen ds = new Disbursemen();
+                ds.setDisbursement_id(acc.IsNullToEmtyString(request.getParameter("disbursement[disbursement_id]")));
+                ret = ds.DeleteDisbursemen(ds);
+            }
+            if(ret){
+                out.print("TRUE");
+            }else{
+                out.print("FALSE");
+            }
+            out.flush();
+            out.close();
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

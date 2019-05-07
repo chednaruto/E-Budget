@@ -1,0 +1,44 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package rd.ebudget.object.projectManagement;
+
+/**
+ *
+ * @author Mr.Tue
+ */
+public class ProjectGovernmentPolicy {
+    private String project_id;
+    private String government_policy_id;
+
+    /**
+     * @return the project_id
+     */
+    public String getProject_id() {
+        return project_id;
+    }
+
+    /**
+     * @param project_id the project_id to set
+     */
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    /**
+     * @return the government_policy_id
+     */
+    public String getGovernment_policy_id() {
+        return government_policy_id;
+    }
+
+    /**
+     * @param government_policy_id the government_policy_id to set
+     */
+    public void setGovernment_policy_id(String government_policy_id) {
+        this.government_policy_id = government_policy_id;
+    }
+
+}

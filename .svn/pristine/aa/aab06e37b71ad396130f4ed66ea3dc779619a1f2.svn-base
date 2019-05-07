@@ -1,0 +1,6 @@
+
+package rd.ebudget.object.lookup.budget;
+
+public class BudgetCategory {
+    
+}

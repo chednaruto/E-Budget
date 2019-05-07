@@ -1,0 +1,71 @@
+
+package rd.ebudget.object.lookup.Gov;
+
+import rd.ebudget.tools.MysqlManager;
+
+public class MofStrategic {
+    private String mof_strategic_id;
+    private String mof_strategic_name;
+    private String mof_strategic_status;
+    
+    public boolean InsertMofStrategic(MofStrategic ms){
+        boolean ret = false;
+        try{
+            MysqlManager mm = new MysqlManager();
+            String query = "INSERT INTO mof_strategic(mof_strategic_name,mof_strategic_status) "+
+                    "VALUES('"+ms.mof_strategic_name+"','"+ms.mof_strategic_status+"')";
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret;
+    }
+    public boolean UpdateMofStrategic(MofStrategic ms){
+        boolean ret = false;
+        try{
+            MysqlManager mm = new MysqlManager();
+            String query = "REPLACE INTO mof_strategic(mof_strategic_id,mof_strategic_name,mof_strategic_status) "+
+                    "VALUES('"+ms.getMof_strategic_id()+"','"+ms.mof_strategic_name+"','"+ms.mof_strategic_status+"')";
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+            
+        }
+        return ret;
+    }
+    
+    public boolean DeleteMofStrategic(MofStrategic ms){
+        boolean ret = false;
+        try{
+            MysqlManager mm = new MysqlManager();
+            String query = "DELETE FROM  mof_strategic WHERE mof_strategic_id = '"+ms.getMof_strategic_id()+"'";
+            
+            ret = mm.Excute(query);
+        }catch(Exception ex){
+        }
+        return ret;
+    }
+    
+    public String getMof_strategic_id() {
+        return mof_strategic_id;
+    }
+
+    public void setMof_strategic_id(String mof_strategic_id) {
+        this.mof_strategic_id = mof_strategic_id;
+    }
+
+    public String getMof_strategic_name() {
+        return mof_strategic_name;
+    }
+
+    public void setMof_strategic_name(String mof_strategic_name) {
+        this.mof_strategic_name = mof_strategic_name;
+    }
+
+    public String getMof_strategic_status() {
+        return mof_strategic_status;
+    }
+
+    public void setMof_strategic_status(String mof_strategic_status) {
+        this.mof_strategic_status = mof_strategic_status;
+    }
+}

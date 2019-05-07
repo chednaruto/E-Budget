@@ -1,0 +1,203 @@
+package rd.ebudget.object.Budget;
+
+import java.sql.ResultSet;
+import rd.ebudget.tools.DB2Manager;
+
+public class UserPermission {
+
+    private String id;
+    private String super_admin;
+    private String admin;
+    private String parcel;
+    private String finance;
+    private String project_manager;
+    private String boss;
+    private String officeid;
+    private String permission_status;
+
+    public boolean CheckingPerrmissionIsOK(User u) {
+        boolean ret = false;
+        try {
+            String query = "select count(*) from e_budget.user_permission WHERE permission_status='Y' and id='" + u.getId() + "' and officeid='" + u.getOfficeid() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ResultSet rs = dbms.GetDataAsResultSet(query);
+            rs.next();
+            if (rs.getInt("cc") > 0) {
+                ret = true;
+            } else {
+                ret = false;
+            }
+            dbms.closeConnection();
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean InsertUserPermission(UserPermission up) {
+        boolean ret = false;
+        try {
+            String query = "INSERT INTO e_budget.user_permission(id,admin,parcel,finance,officeid,permission_status,super_admin,project_manager,boss) "
+                    + "VALUES('" + up.getId() + "','" + up.getAdmin() + "','" + up.getParcel() + "','" + up.getFinance() + "','" + up.getOfficeid() + "','" + up.getPermission_status() + "','" + up.getSuper_admin() + "','" + up.getProject_manager() + "','" + up.getBoss() + "')";
+             System.out.println(query);
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean UpdateUserPermission(UserPermission up) {
+        boolean ret = false;
+        try {
+            String query = "UPDATE e_budget.user_permission "
+                    + "SET admin='" + up.getAdmin() + "',parcel='" + up.getParcel() + "',finance='" + up.getFinance() + "',permission_status='" + up.getPermission_status() + "',super_admin='"+up.getSuper_admin()+"',project_manager='"+up.getProject_manager()+"',boss='"+up.getBoss()+"' "
+                    + "WHERE id='" + up.getId() + "' AND officeid='" + up.getOfficeid() + "'";
+            System.out.println(query);
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    public boolean DeleteUserPermission(UserPermission up) {
+        boolean ret = false;
+        try {
+            String query = "DELETE FROM e_budget.user_permission WHERE id='" + up.getId() + "' AND officeid='" + up.getOfficeid() + "'";
+            DB2Manager dbms = new DB2Manager();
+            ret = dbms.Excute(query);
+        } catch (Exception ex) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the admin
+     */
+    public String getAdmin() {
+        return admin;
+    }
+
+    /**
+     * @param admin the admin to set
+     */
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    /**
+     * @return the parcel
+     */
+    public String getParcel() {
+        return parcel;
+    }
+
+    /**
+     * @param parcel the parcel to set
+     */
+    public void setParcel(String parcel) {
+        this.parcel = parcel;
+    }
+
+    /**
+     * @return the finance
+     */
+    public String getFinance() {
+        return finance;
+    }
+
+    /**
+     * @param finance the finance to set
+     */
+    public void setFinance(String finance) {
+        this.finance = finance;
+    }
+
+    /**
+     * @return the officeid
+     */
+    public String getOfficeid() {
+        return officeid;
+    }
+
+    /**
+     * @param officeid the officeid to set
+     */
+    public void setOfficeid(String officeid) {
+        this.officeid = officeid;
+    }
+
+    /**
+     * @return the permission_status
+     */
+    public String getPermission_status() {
+        return permission_status;
+    }
+
+    /**
+     * @param permission_status the permission_status to set
+     */
+    public void setPermission_status(String permission_status) {
+        this.permission_status = permission_status;
+    }
+
+    /**
+     * @return the super_admin
+     */
+    public String getSuper_admin() {
+        return super_admin;
+    }
+
+    /**
+     * @param super_admin the super_admin to set
+     */
+    public void setSuper_admin(String super_admin) {
+        this.super_admin = super_admin;
+    }
+
+    /**
+     * @return the project_manager
+     */
+    public String getProject_manager() {
+        return project_manager;
+    }
+
+    /**
+     * @param project_manager the project_manager to set
+     */
+    public void setProject_manager(String project_manager) {
+        this.project_manager = project_manager;
+    }
+
+    /**
+     * @return the boss
+     */
+    public String getBoss() {
+        return boss;
+    }
+
+    /**
+     * @param boss the boss to set
+     */
+    public void setBoss(String boss) {
+        this.boss = boss;
+    }
+}
